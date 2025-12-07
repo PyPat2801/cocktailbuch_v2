@@ -2,6 +2,8 @@ import sys
 import logging
 
 from PySide6.QtWidgets import QApplication
+from core.database import DataBase
+from core.styling_config import AllDrinksStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -12,7 +14,9 @@ def main():
 
     app = QApplication(sys.argv)
     config = create_config()
-    main_window = MainWindow(app, config)
+    styling = create_styling()
+    database = get_database()
+    main_window = MainWindow(app, config, styling.main_window_style, database)
 
     main_window.initialize()
     main_window.show()
@@ -33,12 +37,27 @@ def create_config():
         ),
         all_drinks_page=AllDrinksConfig(
             goto_home_button=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
+            arrow_left=Rectangle(origin_x=1, origin_y=10, width=2, height=1),
             sheet_left=Rectangle(origin_x=2, origin_y=1, width=21, height=18),
             sheet_right=Rectangle(origin_x=24, origin_y=1, width=21, height=18),
         ),
         scaling_factor=0.5,
     )
     return config
+
+def create_styling():
+    styling = StylingConfig(
+        main_window_style=MainWindowStyle(
+            all_drinks_style=AllDrinksStyle(
+                sheet_left_style=SheetLeftStyle(),
+                arrow_style=ArrowBarStyle()
+            )
+        )
+    )
+    return styling
+
+def get_database():
+    return DataBase("cocktails.db")
 
 if __name__ == "__main__":
     main()

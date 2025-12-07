@@ -1,19 +1,20 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QGridLayout, QLabel, QSizePolicy
 from PySide6.QtCore import Qt
-from core.config import GuiConfig
-from gui.all_drinks.all_drinks_page import AllDrinksPage
-from gui.home.home_page import HomePage
+from core import GuiConfig, DataBase, MainWindowStyle
+from gui.all_drinks import AllDrinksPage
+from gui.home import HomePage
 
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, application: QApplication, configuration: GuiConfig):
+    def __init__(self, application: QApplication, configuration: GuiConfig, styling: MainWindowStyle, database: DataBase):
         super().__init__()
         self._config = configuration
+        self._styling = styling
         self._app = application
         self._pages = QStackedWidget()
         self._home_page = HomePage(configuration.home_page, configuration.grid, self._show_all_drinks_page)
-        self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, self._show_home_page)
+        self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style, self._show_home_page, database)
 
     def initialize(self):
         self._set_window_format()

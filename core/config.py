@@ -27,6 +27,7 @@ class HomePageConfig:
 @dataclass
 class AllDrinksConfig:
     goto_home_button: Rectangle
+    arrow_left: Rectangle
     sheet_left: Rectangle
     sheet_right: Rectangle
 

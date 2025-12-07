@@ -26,7 +26,7 @@ class HomeText(QLabel):
 
     def _update_font_size(self):
 
-        font_size = int(min(self.width() * 0.5, self.width() / 8))
+        font_size = int(min(self.width() * 0.4, self.width() / 15))
         font_size = max(12, font_size)
         font_size = min(120, font_size)
 
