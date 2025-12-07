@@ -26,8 +26,8 @@ def create_config():
         grid=GridSpan(width=50, height=20),
         home_page=HomePageConfig(
             home_icon=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
-            home_text=Rectangle(origin_x=10, origin_y=7, width=20, height=3),
-            goto_drinks_button=Rectangle(origin_x=10, origin_y=10, width=8, height=5),
+            home_text=Rectangle(origin_x=10, origin_y=2, width=30, height=6),
+            goto_drinks_button=Rectangle(origin_x=5, origin_y=10, width=8, height=5),
             add_drinks_button=Rectangle(origin_x=20, origin_y=10, width=8, height=5),
             find_drinks_button=Rectangle(origin_x=35, origin_y=10, width=8, height=5)
         ),
@@ -39,7 +39,6 @@ def create_config():
         scaling_factor=0.5,
     )
     return config
-
 
 if __name__ == "__main__":
     main()

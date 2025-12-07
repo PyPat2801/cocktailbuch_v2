@@ -21,7 +21,7 @@ class FindDrinksButton(QPushButton):
         self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("find_drinks_transparent.png", "icons"))
+        pixmap = QPixmap(Utility.get_image_path("find_drinks.png", "icons"))
         self._image_label.setPixmap(pixmap)
 
     def resizeEvent(self, event):

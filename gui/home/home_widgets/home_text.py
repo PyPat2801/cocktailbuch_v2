@@ -15,21 +15,26 @@ class HomeText(QLabel):
         self.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         self.setStyleSheet("""
             color: white;
-            font-size: 48px;
             font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
             background-color: red;
         """)
         self.setWordWrap(True)
 
     def resizeEvent(self, event):
-        self._update_font()
         super().resizeEvent(event)
+        self._update_font_size()
 
-    def _update_font(self):
-        height = self.height()
-        width = self.width()
-        font_size = max(8, min(height // 4, width // 18))
-        font = QFont("Brush Script MT")
-        font.setPointSize(font_size)
-        self.setFont(font)
+    def _update_font_size(self):
+
+        font_size = int(min(self.width() * 0.5, self.width() / 8))
+        font_size = max(12, font_size)
+        font_size = min(120, font_size)
+
+        self.setStyleSheet(f"""
+            color: white;
+            background-color: transparent;
+            font-size: {font_size}px;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+        """)
+
 
