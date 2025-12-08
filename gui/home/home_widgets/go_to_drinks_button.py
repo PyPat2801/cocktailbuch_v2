@@ -4,9 +4,9 @@ from core.utility import Utility
 
 
 class GotoDrinksButton(QPushButton):
-    def __init__(self, goto_drinks_callback):
+    def __init__(self, path, goto_drinks_callback):
         super().__init__()
-
+        self._path = path
         self._image_label = QLabel(self)
         self._callback = goto_drinks_callback
 
@@ -22,7 +22,7 @@ class GotoDrinksButton(QPushButton):
         self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("go_to_drinks.png", "icons"))
+        pixmap = QPixmap(Utility.get_image_path("go_to_drinks.png", self._path))
         self._image_label.setPixmap(pixmap)
 
         if self._callback:

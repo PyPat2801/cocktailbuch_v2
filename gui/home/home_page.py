@@ -5,16 +5,15 @@ from gui.home.home_widgets import GotoDrinksButton, HomeIcon, AddDrinksButton, F
 
 
 class HomePage(QWidget):
-    def __init__(self, configuration: HomePageConfig, grid_config: GridSpan, goto_drinks_callback):
+    def __init__(self, configuration: HomePageConfig, grid_config: GridSpan, path: str, goto_drinks_callback):
         super().__init__()
-
         self._config = configuration
         self._grid_config = grid_config
-        self.home_icon = HomeIcon()
+        self.home_icon = HomeIcon(path)
         self.home_text = HomeText()
-        self.goto_drinks_button = GotoDrinksButton(goto_drinks_callback)
-        self.add_drinks_button = AddDrinksButton()
-        self.find_drinks_button = FindDrinksButton()
+        self.goto_drinks_button = GotoDrinksButton(path, goto_drinks_callback)
+        self.add_drinks_button = AddDrinksButton(path)
+        self.find_drinks_button = FindDrinksButton(path)
 
     def initialize(self, layout):
         self.home_icon.initialize()

@@ -12,5 +12,7 @@ from .styling_config import (
     SheetLeftStyle,
     StylingConfig
 )
+
+from .path_config import PathConfig
 from .database import DataBase
 from .utility import Utility

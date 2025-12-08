@@ -7,7 +7,10 @@ class ArrowBarStyle:
 
 @dataclass
 class SheetLeftStyle:
-    sheet_style: str = """QLabel { background-color: red;border: 1px solid black; }"""
+    drink_title: str = "background-color: red;border: 1px solid black"
+    drink_ingredients: str = "background-color: blue;border: 1px solid black"
+    drink_description: str = "background-color: green;border: 1px solid black"
+    drink_type: str = "background-color: yellow;border: 1px solid black"
 
 
 @dataclass

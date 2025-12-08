@@ -1,0 +1,66 @@
+{
+  "Rezept1": {
+    "title": "Mojito",
+    "ingredients": [
+      "1 Limette",
+      "4 Stiele Minze",
+      "2-4TL brauner Rohrzucker",
+      "10CL weißer kubanischer Rum",
+      "Crushed ice",
+      "Soda"
+    ],
+    "description": "Another stupid joke",
+    "type": "Classics"
+  },
+  "Rezept2": {
+    "title": "Bahama Mama",
+    "ingredients": [
+      "4cl weißer Rum",
+      "2cl brauner Rum",
+      "2cl Kokoslikör",
+      "4cl Ananassaft",
+      "4cl Orangensaft",
+      "1cl Zitronensaft",
+      "1cl Grenadine"
+    ],
+    "description": "Whats the difference between Batman and a black man: Batman can go out at night without Robin",
+    "type": "Classics"
+  },
+  "Rezept3": {
+    "title": "Swimming Pool",
+    "ingredients": [
+      "4cl Wodka",
+      "8cl Ananassaft",
+      "2cl Sahne",
+      "2cl Creme Of Coconut",
+      "Eiswürfel",
+      "Crushed Ice"
+    ],
+    "description": "Swimming Pool shaken",
+    "type": "Cremig"
+  },
+  "Rezept4": {
+    "title": "Caipirinha",
+    "ingredients": [
+      "6cl Cachaca",
+      "1 Limette",
+      "2TL brauner Rohrzucker",
+      "Crushed Ice"
+    ],
+    "description": "Caipi mit viel braunem Rohrzucker für Frauchen",
+    "type": "Classics"
+  },
+  "Rezept5": {
+    "title": "Sex On The Beach",
+    "ingredients": [
+      "4cl Wodka",
+      "2cl Pfirsichlikör",
+      "8cl Orangensaft",
+      "1cl Grenadine",
+      "6cl Cranberry-Nektar",
+      "Crushed Ice"
+    ],
+    "description": "Süßer scheiß",
+    "type": "Seeeeex"
+  }
+}

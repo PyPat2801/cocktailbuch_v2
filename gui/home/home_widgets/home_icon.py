@@ -7,8 +7,9 @@ from core.utility import Utility
 
 class HomeIcon(QLabel):
 
-    def __init__(self) -> None:
+    def __init__(self, path) -> None:
         super().__init__()
+        self._path = path
         self._label = QLabel(self)
 
         layout = QVBoxLayout(self)
@@ -27,7 +28,7 @@ class HomeIcon(QLabel):
         self._label.setAlignment(Qt.AlignCenter)
         self._label.setScaledContents(True)  # Bild wird einfach skaliert
 
-        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", "icons"))
+        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
         self._label.setPixmap(pixmap)
 
     def resizeEvent(self, event):

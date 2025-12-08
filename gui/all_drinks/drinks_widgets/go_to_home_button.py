@@ -4,9 +4,9 @@ from core.utility import Utility
 
 
 class GotoHomeButton(QPushButton):
-    def __init__(self, goto_home_callback):
+    def __init__(self, path, goto_home_callback):
         super().__init__()
-
+        self._path = path
         self.image_label = QLabel(self)
         self._callback = goto_home_callback
 
@@ -22,7 +22,7 @@ class GotoHomeButton(QPushButton):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", "icons"))
+        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
         self.image_label.setPixmap(pixmap)
 
         if self._callback:

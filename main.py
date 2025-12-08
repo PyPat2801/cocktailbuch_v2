@@ -1,22 +1,33 @@
 import sys
 import logging
+import os
 
+from os.path import exists
 from PySide6.QtWidgets import QApplication
-from core.database import DataBase
-from core.styling_config import AllDrinksStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig
+from core import AllDrinksStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig, DataBase, Utility, \
+    PathConfig
 from gui.main_window import MainWindow
 
 from core.config import *
 
 
 def main():
+    db_filename = "cocktails.db"
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
     app = QApplication(sys.argv)
     config = create_config()
     styling = create_styling()
-    database = get_database()
-    main_window = MainWindow(app, config, styling.main_window_style, database)
+    paths = create_path_config()
+
+    if any(arg.startswith("--new-db") for arg in sys.argv):
+        if exists(db_filename):
+            os.remove(db_filename)
+        database = create_default_database(db_name=db_filename, path=paths.image_default_cocktails)
+    else:
+        database = get_database(db_filename)
+
+    main_window = MainWindow(app, config, paths, styling.main_window_style, database)
 
     main_window.initialize()
     main_window.show()
@@ -38,12 +49,16 @@ def create_config():
         all_drinks_page=AllDrinksConfig(
             goto_home_button=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
             arrow_left=Rectangle(origin_x=1, origin_y=10, width=2, height=1),
-            sheet_left=Rectangle(origin_x=2, origin_y=1, width=21, height=18),
+            drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=3),
+            drink_ingredients=Rectangle(origin_x=2, origin_y=6, width=21, height=3),
+            drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=3),
+            drink_type=Rectangle(origin_x=2, origin_y=17, width=21, height=3),
             sheet_right=Rectangle(origin_x=24, origin_y=1, width=21, height=18),
         ),
         scaling_factor=0.5,
     )
     return config
+
 
 def create_styling():
     styling = StylingConfig(
@@ -56,8 +71,40 @@ def create_styling():
     )
     return styling
 
-def get_database():
-    return DataBase("cocktails.db")
+
+def create_path_config():
+    paths_config = PathConfig(image_home_path='images/home',
+                              image_all_drinks_path='images/all_drinks',
+                              image_default_cocktails='images/default_cocktails')
+    return paths_config
+
+
+def get_database(db_filename):
+    return DataBase(db_filename)
+
+
+def create_default_database(db_name, path):
+    images_path = path
+    database = get_database(db_name)  # empty db, will print "no such table: cocktails" error
+    database.create_database()
+    database.fill_database_with_default_cocktails(Utility.load_json("recipes"))
+
+    # This is required to group image filenames with their respective cocktailnames to simplify
+    # the image addition to the database
+    # Alternatively one could add the file_name to the .json and skip the file_name entry
+    # when displaying the QLabel for the left page
+    standardized_cocktail_names = [cocktail_name.lower().replace(' ', '_') + '.jpg' for cocktail_name in
+                                   database.cocktail_names]
+    sorted_standardized_cocktail_names = [
+        database.cocktail_names[standardized_cocktail_names.index(image_file_name)]
+        for image_file_name in
+        Utility.get_image_files_list(images_path)]
+
+    for index, cocktail in enumerate(Utility.get_image_files_list(images_path)):
+        database.add_image_to_db(file_name=cocktail, cocktail_name=sorted_standardized_cocktail_names[index],
+                                 path=images_path)
+    return database
+
 
 if __name__ == "__main__":
     main()

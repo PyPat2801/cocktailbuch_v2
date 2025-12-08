@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QSizePolicy
 
 from core import ArrowBarStyle
 
@@ -13,7 +13,8 @@ class ArrowBar(QPushButton):
         self.clicked.connect(self.on_click)
 
     def initialize(self):
-        self.setStyleSheet(self._styling.background) 
+        self.setStyleSheet(self._styling.background)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def on_click(self) -> None:
         self.callback()

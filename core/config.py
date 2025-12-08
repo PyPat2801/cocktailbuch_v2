@@ -28,7 +28,10 @@ class HomePageConfig:
 class AllDrinksConfig:
     goto_home_button: Rectangle
     arrow_left: Rectangle
-    sheet_left: Rectangle
+    drink_title: Rectangle
+    drink_ingredients: Rectangle
+    drink_description: Rectangle
+    drink_type: Rectangle
     sheet_right: Rectangle
 
 

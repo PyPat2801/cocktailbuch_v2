@@ -108,8 +108,8 @@ class DataBase:
             else:
                 print(f"Exception: {e}")
 
-    def add_image_to_db(self, file_name, cocktail_name):
-        image_data = Utility.load_image(Utility.get_image_path(file_name))
+    def add_image_to_db(self, file_name, cocktail_name, path):
+        image_data = Utility.load_image(Utility.get_image_path(file_name, path))
         c = self.conn.cursor()
         c.execute('''
                 UPDATE cocktails

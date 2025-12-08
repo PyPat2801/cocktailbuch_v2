@@ -5,8 +5,9 @@ from core.utility import Utility
 
 
 class AddDrinksButton(QPushButton):
-    def __init__(self):
+    def __init__(self, path):
         super().__init__()
+        self._path = path
         self._image_label = QLabel(self)
 
     def initialize(self):
@@ -21,7 +22,7 @@ class AddDrinksButton(QPushButton):
         self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("find_by_pic_transparent.png", "icons"))
+        pixmap = QPixmap(Utility.get_image_path("find_by_pic_transparent.png", self._path))
         self._image_label.setPixmap(pixmap)
 
     def resizeEvent(self, event):
