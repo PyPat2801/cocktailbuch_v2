@@ -4,7 +4,7 @@ import os
 
 from os.path import exists
 from PySide6.QtWidgets import QApplication
-from core import AllDrinksStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig, DataBase, Utility, \
+from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig, DataBase, Utility, \
     PathConfig
 from gui.main_window import MainWindow
 
@@ -49,6 +49,7 @@ def create_config():
         all_drinks_page=AllDrinksConfig(
             goto_home_button=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
             arrow_left=Rectangle(origin_x=1, origin_y=10, width=2, height=1),
+            arrow_right=Rectangle(origin_x=47, origin_y=10, width=2, height=1),
             drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=3),
             drink_ingredients=Rectangle(origin_x=2, origin_y=6, width=21, height=3),
             drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=3),
@@ -66,6 +67,9 @@ def create_styling():
             all_drinks_style=AllDrinksStyle(
                 sheet_left_style=SheetLeftStyle(),
                 arrow_style=ArrowBarStyle()
+            ),
+            home_style=HomeStyle(
+                text_style=HomeTextStyle()
             )
         )
     )

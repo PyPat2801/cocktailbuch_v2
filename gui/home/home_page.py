@@ -1,16 +1,17 @@
 from PySide6.QtWidgets import QWidget
 
-from core.config import HomePageConfig, GridSpan
+from core import DataBase, HomePageConfig, HomeStyle
 from gui.home.home_widgets import GotoDrinksButton, HomeIcon, AddDrinksButton, FindDrinksButton, HomeText
 
 
 class HomePage(QWidget):
-    def __init__(self, configuration: HomePageConfig, grid_config: GridSpan, path: str, goto_drinks_callback):
+    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_drinks_callback, database : DataBase):
         super().__init__()
         self._config = configuration
-        self._grid_config = grid_config
+        self._database = database
+        self._styling = styling
         self.home_icon = HomeIcon(path)
-        self.home_text = HomeText()
+        self.home_text = HomeText(styling.text_style)
         self.goto_drinks_button = GotoDrinksButton(path, goto_drinks_callback)
         self.add_drinks_button = AddDrinksButton(path)
         self.find_drinks_button = FindDrinksButton(path)

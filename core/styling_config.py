@@ -7,10 +7,27 @@ class ArrowBarStyle:
 
 @dataclass
 class SheetLeftStyle:
-    drink_title: str = "background-color: red;border: 1px solid black"
+    drink_title: str = """
+            color: white;
+            background-color: transparent;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+        """
+
     drink_ingredients: str = "background-color: blue;border: 1px solid black"
     drink_description: str = "background-color: green;border: 1px solid black"
     drink_type: str = "background-color: yellow;border: 1px solid black"
+
+
+@dataclass
+class HomeTextStyle:
+    text_style: str = """
+            color: white;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+        """
 
 
 @dataclass
@@ -20,8 +37,14 @@ class AllDrinksStyle:
 
 
 @dataclass
+class HomeStyle:
+    text_style: HomeTextStyle
+
+
+@dataclass
 class MainWindowStyle:
     all_drinks_style: AllDrinksStyle
+    home_style: HomeStyle
 
 
 @dataclass

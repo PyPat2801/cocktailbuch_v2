@@ -7,6 +7,8 @@ from .config import (
 )
 from .styling_config import (
     AllDrinksStyle,
+    HomeStyle,
+    HomeTextStyle,
     ArrowBarStyle,
     MainWindowStyle,
     SheetLeftStyle,

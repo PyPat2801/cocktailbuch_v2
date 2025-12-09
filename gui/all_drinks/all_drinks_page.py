@@ -12,9 +12,14 @@ class AllDrinksPage(QWidget):
         self._config = configuration
         self._styling = styling
         self._database = database
+
+        self.index_list = []
+        self.current_cocktail_index = 0
+
         self._goto_home_button = GotoHomeButton(path, goto_home_callback)
 
-        self._arrow_left = ArrowBar("<=", lambda: True, styling.arrow_style)
+        self._arrow_left = ArrowBar("<=", self.scroll_left, styling.arrow_style)
+        self._arrow_right = ArrowBar("=>", self.scroll_right, styling.arrow_style)
 
         self._drink_title = DrinkTitle(configuration.drink_title, styling.sheet_left_style)
         self._drink_ingredients = DrinkIngredients(configuration.drink_ingredients, styling.sheet_left_style)
@@ -23,9 +28,19 @@ class AllDrinksPage(QWidget):
 
         self._sheet_right = SheetRight(configuration.sheet_right)
 
+        self.swap_pages()
+
     def initialize(self, layout):
+        self._initialize_home_page_widgets()
+        self._add_home_page_widgets(layout)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+
+    def _initialize_home_page_widgets(self):
         self._goto_home_button.initialize()
         self._arrow_left.initialize()
+        self._arrow_right.initialize()
 
         self._drink_title.initialize()
         self._drink_ingredients.initialize()
@@ -34,8 +49,10 @@ class AllDrinksPage(QWidget):
 
         self._sheet_right.initialize()
 
+    def _add_home_page_widgets(self, layout):
         self._add_goto_home_button(layout)
         self._add_arrow_left(layout)
+        self._add_arrow_right(layout)
 
         self._add_drink_title(layout)
         self._add_drink_ingredients(layout)
@@ -45,11 +62,8 @@ class AllDrinksPage(QWidget):
         self._add_sheet_right(layout)
 
         self.setLayout(layout)
-        self._goto_home_button.raise_() # overlaps the other widgets
-        self._arrow_left.raise_() # overlaps the other widgets
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
+        self._goto_home_button.raise_()  # overlaps the other widgets
+        self._arrow_left.raise_()  # overlaps the other widgets
 
     def _add_goto_home_button(self, layout):
         layout.addWidget(
@@ -67,6 +81,15 @@ class AllDrinksPage(QWidget):
             self._config.arrow_left.origin_x,
             self._config.arrow_left.height,
             self._config.arrow_left.width
+        )
+
+    def _add_arrow_right(self, layout):
+        layout.addWidget(
+            self._arrow_right,
+            self._config.arrow_right.origin_y,
+            self._config.arrow_right.origin_x,
+            self._config.arrow_right.height,
+            self._config.arrow_right.width
         )
 
     def _add_drink_title(self, layout):
@@ -113,4 +136,19 @@ class AllDrinksPage(QWidget):
             self._config.sheet_right.height,
             self._config.sheet_right.width,
         )
+
+    def scroll_left(self):
+        self.current_cocktail_index = max(0, self.current_cocktail_index - 1)
+        self.swap_pages()
+
+    def scroll_right(self):
+        highest_possible_index = len(self._database.cocktail_names) - 1
+        self.current_cocktail_index = min(highest_possible_index, self.current_cocktail_index + 1)
+        self.swap_pages()
+
+    def swap_pages(self):
+        # cocktail title label
+        drink_title = self._drink_title
+        cocktail_title_text = self._database.cocktail_names[self.current_cocktail_index]
+        drink_title.setText(cocktail_title_text)
 

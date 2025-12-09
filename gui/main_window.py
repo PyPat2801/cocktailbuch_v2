@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self._styling = styling
         self._app = application
         self._pages = QStackedWidget()
-        self._home_page = HomePage(configuration.home_page, configuration.grid, paths.image_home_path, self._show_all_drinks_page)
+        self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path, self._show_all_drinks_page, database)
         self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style, paths.image_all_drinks_path, self._show_home_page, database)
 
     def initialize(self):
