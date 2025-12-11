@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QWidget
 
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
-from gui.all_drinks.drinks_widgets import GotoHomeButton, SheetRight, ArrowBar
+from gui.all_drinks.drinks_widgets import GotoHomeButton, ArrowBar
 from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType
+from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage
 
 
 class AllDrinksPage(QWidget):
@@ -13,7 +14,6 @@ class AllDrinksPage(QWidget):
         self._styling = styling
         self._database = database
 
-        self.index_list = []
         self.current_cocktail_index = 0
 
         self._goto_home_button = GotoHomeButton(path, goto_home_callback)
@@ -26,7 +26,7 @@ class AllDrinksPage(QWidget):
         self._drink_description = DrinkDescription(configuration.drink_description, styling.sheet_left_style)
         self._drink_type = DrinkType(configuration.drink_type, styling.sheet_left_style)
 
-        self._sheet_right = SheetRight(configuration.sheet_right)
+        self._drink_image = DrinkImage(configuration.drink_image, self._database)
 
         self.swap_pages()
 
@@ -47,7 +47,7 @@ class AllDrinksPage(QWidget):
         self._drink_description.initialize()
         self._drink_type.initialize()
 
-        self._sheet_right.initialize()
+        self._drink_image.initialize() #this does currently not initiate anything. discuss with Sebastian
 
     def _add_home_page_widgets(self, layout):
         self._add_goto_home_button(layout)
@@ -59,7 +59,7 @@ class AllDrinksPage(QWidget):
         self._add_drink_description(layout)
         self._add_drink_type(layout)
 
-        self._add_sheet_right(layout)
+        self._add_drink_image(layout)
 
         self.setLayout(layout)
         self._goto_home_button.raise_()  # overlaps the other widgets
@@ -128,13 +128,13 @@ class AllDrinksPage(QWidget):
             self._config.drink_type.width,
         )
 
-    def _add_sheet_right(self, layout):
+    def _add_drink_image(self, layout):
         layout.addWidget(
-            self._sheet_right,
-            self._config.sheet_right.origin_y,
-            self._config.sheet_right.origin_x,
-            self._config.sheet_right.height,
-            self._config.sheet_right.width,
+            self._drink_image,
+            self._config.drink_image.origin_y,
+            self._config.drink_image.origin_x,
+            self._config.drink_image.height,
+            self._config.drink_image.width,
         )
 
     def scroll_left(self):
@@ -147,8 +147,11 @@ class AllDrinksPage(QWidget):
         self.swap_pages()
 
     def swap_pages(self):
-        # cocktail title label
         drink_title = self._drink_title
         cocktail_title_text = self._database.cocktail_names[self.current_cocktail_index]
         drink_title.setText(cocktail_title_text)
+
+        drink_image = self._drink_image
+        cocktail_image_data = self._database.cocktail_images[self.current_cocktail_index]
+        drink_image.update_image(cocktail_image_data)
 

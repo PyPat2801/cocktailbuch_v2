@@ -5,7 +5,7 @@ from gui.home.home_widgets import GotoDrinksButton, HomeIcon, AddDrinksButton, F
 
 
 class HomePage(QWidget):
-    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_drinks_callback, database : DataBase):
+    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_drinks_callback, database: DataBase):
         super().__init__()
         self._config = configuration
         self._database = database
@@ -31,8 +31,6 @@ class HomePage(QWidget):
         self.setLayout(layout)
 
     def resizeEvent(self, event):
-        """Handle resize events by updating icon size based on new grid dimensions."""
-        # Rufe die Parent-Implementierung auf
         super().resizeEvent(event)
 
     def _add_home_icon(self, layout):

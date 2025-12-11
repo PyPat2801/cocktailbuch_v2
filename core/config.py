@@ -33,7 +33,7 @@ class AllDrinksConfig:
     drink_ingredients: Rectangle
     drink_description: Rectangle
     drink_type: Rectangle
-    sheet_right: Rectangle
+    drink_image: Rectangle
 
 
 @dataclass
