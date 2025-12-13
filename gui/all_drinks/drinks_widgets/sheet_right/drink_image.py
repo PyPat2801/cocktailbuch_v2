@@ -38,12 +38,10 @@ class DrinkImage(QLabel):
         if width is None or height is None:
             width = self._drink_image.width()
             height = self._drink_image.height()
-
         if width <= 0 or height <= 0:
             return
 
         target_size = QSize(width, height)
-
         original_size = self._original_pixmap.size()
         if original_size.width() <= 0 or original_size.height() <= 0:
             return
@@ -57,7 +55,6 @@ class DrinkImage(QLabel):
             scaled_size = QSize(target_size.width(), int(target_size.width() / original_aspect_ratio))
 
         scaled_pixmap = self._original_pixmap.scaled(scaled_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-
         size_diff = scaled_pixmap.size() - target_size
 
         x = int(0.5 * size_diff.width())

@@ -151,6 +151,11 @@ class AllDrinksPage(QWidget):
         cocktail_title_text = self._database.cocktail_names[self.current_cocktail_index]
         drink_title.setText(cocktail_title_text)
 
+        drink_ingredients = self._drink_ingredients
+        cocktail_ingredients_text = self._database.cocktail_ingredients[self.current_cocktail_index]
+        formatted_recipe_text = self._drink_ingredients.format_ingredients(cocktail_ingredients_text)
+        drink_ingredients.setText(formatted_recipe_text)
+
         drink_image = self._drink_image
         cocktail_image_data = self._database.cocktail_images[self.current_cocktail_index]
         drink_image.update_image(cocktail_image_data)

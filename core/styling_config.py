@@ -15,7 +15,7 @@ class SheetLeftStyle:
             font-size: {font_size}px;
         """
 
-    drink_ingredients: str = "background-color: blue;border: 1px solid black"
+    drink_ingredients: str = drink_title
     drink_description: str = "background-color: green;border: 1px solid black"
     drink_type: str = "background-color: yellow;border: 1px solid black"
 

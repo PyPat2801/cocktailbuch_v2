@@ -16,13 +16,14 @@ class DrinkTitle(QLabel):
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_title)
         self.setAlignment(Qt.AlignCenter)
+        self.setWordWrap(True)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._update_font_size()
 
     def _update_font_size(self):
-        font_size = int(min(self.width() * 0.5, self.width() / 8))
+        font_size = int(min(self.width() * 0.5, self.width() / 7))
         font_size = max(12, font_size)
         font_size = min(120, font_size)
 
