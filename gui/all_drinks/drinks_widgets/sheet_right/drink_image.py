@@ -11,14 +11,17 @@ class DrinkImage(QLabel):
         self._config = config
         self._database = database
         self._drink_image = QLabel(self)
-        self._drink_image.setAlignment(Qt.AlignCenter)
-        self.setLayout(QVBoxLayout())
-        self.layout().addWidget(self._drink_image)
+        self._layout = QVBoxLayout()
 
         self._original_pixmap: Optional[QPixmap] = None
 
     def initialize(self):
-        pass
+        self.initialize_image()
+
+    def initialize_image(self):
+        self._drink_image.setAlignment(Qt.AlignCenter)
+        self.setLayout(self._layout)
+        self.layout().addWidget(self._drink_image)
 
     def _set_image(self, image_data: bytes):
         pixmap = QPixmap()

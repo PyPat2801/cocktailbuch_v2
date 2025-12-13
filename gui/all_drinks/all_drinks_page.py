@@ -28,11 +28,11 @@ class AllDrinksPage(QWidget):
 
         self._drink_image = DrinkImage(configuration.drink_image, self._database)
 
-        self.swap_pages()
 
     def initialize(self, layout):
         self._initialize_home_page_widgets()
         self._add_home_page_widgets(layout)
+        self.swap_pages()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

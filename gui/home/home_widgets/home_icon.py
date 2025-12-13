@@ -12,12 +12,14 @@ class HomeIcon(QLabel):
         self._path = path
         self._label = QLabel(self)
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self._label)
+        self._layout = QVBoxLayout(self)
+        self._pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
+
 
     def initialize(self):
         self._set_style()
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.addWidget(self._label)
         self._initialize_image()
 
     def _set_style(self):
@@ -27,9 +29,7 @@ class HomeIcon(QLabel):
     def _initialize_image(self):
         self._label.setAlignment(Qt.AlignCenter)
         self._label.setScaledContents(True)  # Bild wird einfach skaliert
-
-        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
-        self._label.setPixmap(pixmap)
+        self._label.setPixmap(self._pixmap)
 
     def resizeEvent(self, event):
         self._label.setFixedSize(event.size()) # Bild immer so groß wie Button
