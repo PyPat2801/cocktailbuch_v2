@@ -53,7 +53,7 @@ def create_config():
             drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=3),
             drink_ingredients=Rectangle(origin_x=2, origin_y=6, width=21, height=6),
             drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=4),
-            drink_type=Rectangle(origin_x=2, origin_y=17, width=21, height=3),
+            drink_type=Rectangle(origin_x=1, origin_y=17, width=21, height=3),
             drink_image=Rectangle(origin_x=24, origin_y=1, width=21, height=18),
         ),
         scaling_factor=0.5,

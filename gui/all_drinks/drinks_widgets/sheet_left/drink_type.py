@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLabel
 
 from core import Rectangle, SheetLeftStyle
@@ -14,6 +15,7 @@ class DrinkType(QLabel):
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_type)
+        self.setAlignment(Qt.AlignCenter)
         self.setWordWrap(True)
 
     def resizeEvent(self, event):

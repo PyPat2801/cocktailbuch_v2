@@ -15,6 +15,7 @@ class DrinkIngredients(QLabel):
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_ingredients)
+        self.setWordWrap(True)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
