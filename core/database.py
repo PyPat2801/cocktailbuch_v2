@@ -10,6 +10,7 @@ class DataBase:
         self.cocktail_types: List[str] = sorted(list(set(self.get_cocktail_attributes("type"))))
         self.cocktail_types_unsorted: List[str] = self.get_cocktail_attributes("type")
         self.cocktail_ingredients: List[str] = self.get_cocktail_attributes("ingredients")
+        self.cocktail_descriptions: List[str] = self.get_cocktail_attributes("description")
         self.cocktail_images: List[bytes] = self.get_cocktail_attributes("image", is_image=True)
         self.cocktail_keys: List[str] = self.get_keys_from_db()
 

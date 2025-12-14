@@ -16,8 +16,8 @@ class SheetLeftStyle:
         """
 
     drink_ingredients: str = drink_title
-    drink_description: str = "background-color: green;border: 1px solid black"
-    drink_type: str = "background-color: yellow;border: 1px solid black"
+    drink_description: str = drink_title
+    drink_type: str = drink_title
 
 
 @dataclass

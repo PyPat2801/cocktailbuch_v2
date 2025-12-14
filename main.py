@@ -52,7 +52,7 @@ def create_config():
             arrow_right=Rectangle(origin_x=47, origin_y=10, width=2, height=1),
             drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=3),
             drink_ingredients=Rectangle(origin_x=2, origin_y=6, width=21, height=6),
-            drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=3),
+            drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=4),
             drink_type=Rectangle(origin_x=2, origin_y=17, width=21, height=3),
             drink_image=Rectangle(origin_x=24, origin_y=1, width=21, height=18),
         ),

@@ -14,3 +14,20 @@ class DrinkType(QLabel):
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_type)
+        self.setWordWrap(True)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._update_font_size()
+
+    def _update_font_size(self):
+        font_size = int(min(self.width() * 0.5, self.width() / 15))
+        font_size = max(12, font_size)
+        font_size = min(120, font_size)
+
+        style = self._styling.drink_type.format(font_size=font_size)
+        self.setStyleSheet(style)
+
+    @staticmethod
+    def format_type(type_text: str):
+        return f"------ {type_text} ------"

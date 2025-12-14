@@ -28,7 +28,6 @@ class AllDrinksPage(QWidget):
 
         self._drink_image = DrinkImage(configuration.drink_image, self._database)
 
-
     def initialize(self, layout):
         self._initialize_home_page_widgets()
         self._add_home_page_widgets(layout)
@@ -47,7 +46,7 @@ class AllDrinksPage(QWidget):
         self._drink_description.initialize()
         self._drink_type.initialize()
 
-        self._drink_image.initialize() #this does currently not initiate anything. discuss with Sebastian
+        self._drink_image.initialize()
 
     def _add_home_page_widgets(self, layout):
         self._add_goto_home_button(layout)
@@ -155,6 +154,15 @@ class AllDrinksPage(QWidget):
         cocktail_ingredients_text = self._database.cocktail_ingredients[self.current_cocktail_index]
         formatted_recipe_text = self._drink_ingredients.format_ingredients(cocktail_ingredients_text)
         drink_ingredients.setText(formatted_recipe_text)
+
+        drink_description = self._drink_description
+        cocktail_description_text = self._database.cocktail_descriptions[self.current_cocktail_index]
+        drink_description.setText(cocktail_description_text)
+
+        drink_type = self._drink_type
+        cocktail_type_text = self._database.cocktail_types_unsorted[self.current_cocktail_index]
+        formatted_type_text = self._drink_type.format_type(cocktail_type_text)
+        drink_type.setText(formatted_type_text)
 
         drink_image = self._drink_image
         cocktail_image_data = self._database.cocktail_images[self.current_cocktail_index]
