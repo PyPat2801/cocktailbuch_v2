@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         cell.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         cell.setStyleSheet("""
             QLabel {
-                background-color: gray;border: 1px solid black;
+                background-color: black;
             }
         """)
         return cell

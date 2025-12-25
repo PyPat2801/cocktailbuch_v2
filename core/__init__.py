@@ -18,3 +18,4 @@ from .styling_config import (
 from .path_config import PathConfig
 from .database import DataBase
 from .utility import Utility
+from .font_divisors import FontDivisors

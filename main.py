@@ -1,11 +1,12 @@
+import math
 import sys
 import logging
 import os
 
 from os.path import exists
 from PySide6.QtWidgets import QApplication
-from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle, StylingConfig, DataBase, Utility, \
-    PathConfig
+from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
+    StylingConfig, DataBase, Utility, PathConfig
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -35,26 +36,37 @@ def main():
     sys.exit(app.exec())
 
 
+def set_app_resolution() -> tuple[int, int]:
+    screen = QApplication.primaryScreen()
+    geometry = screen.availableGeometry()
+
+    width = math.ceil(geometry.width() * 0.7)
+    height = math.ceil(geometry.height() * 0.7)
+
+    return width, height
+
+
 def create_config():
+    window_width, window_height = set_app_resolution()
     config = GuiConfig(
-        window=Rectangle(100, 100, 800, 600),
-        grid=GridSpan(width=50, height=20),
+        window=Rectangle(100, 100, window_width, window_height),
+        grid=GridSpan(width=50, height=30),
         home_page=HomePageConfig(
-            home_icon=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
-            home_text=Rectangle(origin_x=10, origin_y=2, width=30, height=6),
-            goto_drinks_button=Rectangle(origin_x=5, origin_y=10, width=8, height=5),
-            add_drinks_button=Rectangle(origin_x=20, origin_y=10, width=8, height=5),
-            find_drinks_button=Rectangle(origin_x=35, origin_y=10, width=8, height=5)
+            home_icon=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
+            home_text=Rectangle(origin_x=10, origin_y=1, width=30, height=13),
+            goto_drinks_button=Rectangle(origin_x=1, origin_y=18, width=7, height=8),
+            add_drinks_button=Rectangle(origin_x=15, origin_y=18, width=7, height=8),
+            find_drinks_button=Rectangle(origin_x=29, origin_y=18, width=7, height=8)
         ),
         all_drinks_page=AllDrinksConfig(
-            goto_home_button=Rectangle(origin_x=40, origin_y=1, width=7, height=3),
-            arrow_left=Rectangle(origin_x=1, origin_y=10, width=2, height=1),
-            arrow_right=Rectangle(origin_x=47, origin_y=10, width=2, height=1),
-            drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=3),
-            drink_ingredients=Rectangle(origin_x=2, origin_y=6, width=21, height=6),
-            drink_description=Rectangle(origin_x=2, origin_y=12, width=21, height=4),
-            drink_type=Rectangle(origin_x=1, origin_y=17, width=21, height=3),
-            drink_image=Rectangle(origin_x=24, origin_y=1, width=21, height=18),
+            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
+            arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
+            arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
+            drink_title=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
+            drink_ingredients=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
+            drink_description=Rectangle(origin_x=2, origin_y=18, width=21, height=9),
+            drink_type=Rectangle(origin_x=1, origin_y=28, width=21, height=2),
+            drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
         ),
         scaling_factor=0.5,
     )

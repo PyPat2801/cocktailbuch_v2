@@ -15,7 +15,6 @@ class HomeIcon(QLabel):
         self._layout = QVBoxLayout(self)
         self._pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
 
-
     def initialize(self):
         self._set_style()
         self._layout.setContentsMargins(0, 0, 0, 0)

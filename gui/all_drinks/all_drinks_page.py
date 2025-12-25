@@ -153,7 +153,7 @@ class AllDrinksPage(QWidget):
         drink_ingredients = self._drink_ingredients
         cocktail_ingredients_text = self._database.cocktail_ingredients[self.current_cocktail_index]
         formatted_recipe_text = self._drink_ingredients.format_ingredients(cocktail_ingredients_text)
-        drink_ingredients.setText(formatted_recipe_text)
+        drink_ingredients.set_text(formatted_recipe_text)
 
         drink_description = self._drink_description
         cocktail_description_text = self._database.cocktail_descriptions[self.current_cocktail_index]

@@ -2,21 +2,40 @@ from dataclasses import dataclass
 
 @dataclass
 class ArrowBarStyle:
-    background: str = "background-color: black; border: 1px solid black"
+    background: str = "background-color: white; border: 1px solid white"
 
 
 @dataclass
 class SheetLeftStyle:
     drink_title: str = """
-            color: white;
-            background-color: transparent;
-            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
-            font-weight: bold;
-            font-size: {font_size}px;
-        """
+        color: white;
+        background-color: transparent;
+        font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+        font-weight: bold;
+        font-size: {font_size}px;
+    """
 
-    drink_ingredients: str = drink_title
-    drink_description: str = drink_title
+    drink_ingredients: str = """
+        QScrollArea {{
+            border: 1px solid white;
+            background-color: transparent;
+        }}
+
+        QScrollArea > QWidget {{
+            background-color: transparent;
+        }}
+
+        QLabel {{
+            color: white;
+            background-color: gray;
+            font-size: {font_size}px;
+        }}
+    """
+    drink_description: str = """
+        color: white;
+        background-color: transparent;
+        font-size: {font_size}px;
+    """
     drink_type: str = drink_title
 
 
