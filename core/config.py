@@ -25,6 +25,11 @@ class HomePageConfig:
 
 
 @dataclass
+class AddDrinksConfig:
+    goto_home_button: Rectangle
+
+
+@dataclass
 class AllDrinksConfig:
     goto_home_button: Rectangle
     arrow_left: Rectangle
@@ -42,4 +47,4 @@ class GuiConfig:
     grid: GridSpan
     home_page: HomePageConfig
     all_drinks_page: AllDrinksConfig
-    scaling_factor: float
+    add_drinks_page: AddDrinksConfig

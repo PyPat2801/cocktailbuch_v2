@@ -56,6 +56,11 @@ class AllDrinksStyle:
 
 
 @dataclass
+class AddDrinksStyle:
+    pass
+
+
+@dataclass
 class HomeStyle:
     text_style: HomeTextStyle
 
@@ -64,6 +69,8 @@ class HomeStyle:
 class MainWindowStyle:
     all_drinks_style: AllDrinksStyle
     home_style: HomeStyle
+    add_drinks_style: AddDrinksStyle
+
 
 
 @dataclass

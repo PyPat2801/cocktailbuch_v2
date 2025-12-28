@@ -6,7 +6,7 @@ import os
 from os.path import exists
 from PySide6.QtWidgets import QApplication
 from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
-    StylingConfig, DataBase, Utility, PathConfig
+    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -63,12 +63,12 @@ def create_config():
             arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
             drink_title=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
-            drink_description=Rectangle(origin_x=2, origin_y=18, width=21, height=9),
+            drink_ingredients=Rectangle(origin_x=4, origin_y=7, width=19, height=11),
+            drink_description=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
             drink_type=Rectangle(origin_x=1, origin_y=28, width=21, height=2),
             drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
         ),
-        scaling_factor=0.5,
+        add_drinks_page=AddDrinksConfig(goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5))
     )
     return config
 
@@ -82,7 +82,8 @@ def create_styling():
             ),
             home_style=HomeStyle(
                 text_style=HomeTextStyle()
-            )
+            ),
+            add_drinks_style=AddDrinksStyle()
         )
     )
     return styling
@@ -91,7 +92,8 @@ def create_styling():
 def create_path_config():
     paths_config = PathConfig(image_home_path='images/home',
                               image_all_drinks_path='images/all_drinks',
-                              image_default_cocktails='images/default_cocktails')
+                              image_default_cocktails='images/default_cocktails',
+                              image_add_drinks_path='images/add_drinks')
     return paths_config
 
 

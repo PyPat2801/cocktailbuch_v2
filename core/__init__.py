@@ -3,10 +3,12 @@ from .config import (
     GridSpan,
     GuiConfig,
     HomePageConfig,
-    Rectangle
+    Rectangle,
+    AddDrinksConfig
 )
 from .styling_config import (
     AllDrinksStyle,
+    AddDrinksStyle,
     HomeStyle,
     HomeTextStyle,
     ArrowBarStyle,

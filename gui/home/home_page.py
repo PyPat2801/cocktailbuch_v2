@@ -5,21 +5,21 @@ from gui.home.home_widgets import GotoDrinksButton, HomeIcon, AddDrinksButton, F
 
 
 class HomePage(QWidget):
-    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_drinks_callback, database: DataBase):
+    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_all_drinks_callback, goto_add_drinks_callback, database: DataBase):
         super().__init__()
         self._config = configuration
         self._database = database
         self._styling = styling
         self.home_icon = HomeIcon(path)
         self.home_text = HomeText(styling.text_style)
-        self.goto_drinks_button = GotoDrinksButton(path, goto_drinks_callback)
-        self.add_drinks_button = AddDrinksButton(path)
+        self.goto_all_drinks_button = GotoDrinksButton(path, goto_all_drinks_callback)
+        self.add_drinks_button = AddDrinksButton(path, goto_add_drinks_callback)
         self.find_drinks_button = FindDrinksButton(path)
 
     def initialize(self, layout):
         self.home_icon.initialize()
         self.home_text.initialize()
-        self.goto_drinks_button.initialize()
+        self.goto_all_drinks_button.initialize()
         self.add_drinks_button.initialize()
         self.find_drinks_button.initialize()
 
@@ -44,7 +44,7 @@ class HomePage(QWidget):
 
     def _add_goto_drinks_button(self, layout):
         layout.addWidget(
-                self.goto_drinks_button,
+                self.goto_all_drinks_button,
                 self._config.goto_drinks_button.origin_y,
                 self._config.goto_drinks_button.origin_x,
                 self._config.goto_drinks_button.height,

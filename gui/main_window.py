@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt
 from core import GuiConfig, DataBase, MainWindowStyle, PathConfig
 from gui.all_drinks import AllDrinksPage
 from gui.home import HomePage
+from gui.add_drinks import AddDrinksPage
 
 
 class MainWindow(QMainWindow):
@@ -13,21 +14,23 @@ class MainWindow(QMainWindow):
         self._styling = styling
         self._app = application
         self._pages = QStackedWidget()
-        self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path, self._show_all_drinks_page, database)
+        self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path, self._show_all_drinks_page, self._show_add_drinks_page, database)
         self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style, paths.image_all_drinks_path, self._show_home_page, database)
+        self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style, paths.image_add_drinks_path, self._show_home_page, database)
 
     def initialize(self):
         self._set_window_format()
         home_layout = self._create_grid_layout()
         all_drinks_layout = self._create_grid_layout()
+        add_drinks_layout = self._create_grid_layout()
 
-        # hier andere komponenten initialisieren
         self._home_page.initialize(home_layout)
         self._all_drinks_page.initialize(all_drinks_layout)
+        self._add_drinks_page.initialize(add_drinks_layout)
 
-        # hierarchien definieren
         self._pages.addWidget(self._home_page)
         self._pages.addWidget(self._all_drinks_page)
+        self._pages.addWidget(self._add_drinks_page)
         self.setCentralWidget(self._pages)
 
     def _set_window_format(self):
@@ -70,6 +73,9 @@ class MainWindow(QMainWindow):
 
     def _show_all_drinks_page(self):
         self._show_page(1)
+
+    def _show_add_drinks_page(self):
+        self._show_page(2)
 
     def _show_page(self, index):
         self._pages.setCurrentIndex(index)
