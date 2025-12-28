@@ -68,7 +68,8 @@ def create_config():
             drink_type=Rectangle(origin_x=1, origin_y=28, width=21, height=2),
             drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
         ),
-        add_drinks_page=AddDrinksConfig(goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5))
+        add_drinks_page=AddDrinksConfig(goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
+                                        title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7))
     )
     return config
 

@@ -27,6 +27,7 @@ class HomePageConfig:
 @dataclass
 class AddDrinksConfig:
     goto_home_button: Rectangle
+    title_template: Rectangle
 
 
 @dataclass
