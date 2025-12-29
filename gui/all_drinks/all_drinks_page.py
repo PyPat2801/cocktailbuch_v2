@@ -1,22 +1,20 @@
-from PySide6.QtWidgets import QWidget
-
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
-from gui.all_drinks.drinks_widgets import GotoHomeButton, ArrowBar
+from gui.all_drinks.drinks_widgets import ArrowBar
 from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType
 from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage
 
+from gui.base_layer import BaseLayer
 
-class AllDrinksPage(QWidget):
+
+class AllDrinksPage(BaseLayer):
     def __init__(self, configuration: AllDrinksConfig, styling: AllDrinksStyle,  path: str, goto_home_callback, database: DataBase):
-        super().__init__()
+        super().__init__(configuration.goto_home_button, path, goto_home_callback)
 
         self._config = configuration
         self._styling = styling
         self._database = database
 
         self.current_cocktail_index = 0
-
-        self._goto_home_button = GotoHomeButton(path, goto_home_callback)
 
         self._arrow_left = ArrowBar("<=", self.scroll_left, styling.arrow_style)
         self._arrow_right = ArrowBar("=>", self.scroll_right, styling.arrow_style)
@@ -29,15 +27,13 @@ class AllDrinksPage(QWidget):
         self._drink_image = DrinkImage(configuration.drink_image, self._database)
 
     def initialize(self, layout):
+        super().initialize(layout)
+
         self._initialize_home_page_widgets()
         self._add_home_page_widgets(layout)
         self.swap_pages()
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-
     def _initialize_home_page_widgets(self):
-        self._goto_home_button.initialize()
         self._arrow_left.initialize()
         self._arrow_right.initialize()
 
@@ -49,7 +45,6 @@ class AllDrinksPage(QWidget):
         self._drink_image.initialize()
 
     def _add_home_page_widgets(self, layout):
-        self._add_goto_home_button(layout)
         self._add_arrow_left(layout)
         self._add_arrow_right(layout)
 
@@ -61,18 +56,10 @@ class AllDrinksPage(QWidget):
         self._add_drink_image(layout)
 
         self.setLayout(layout)
+
         self._goto_home_button.raise_()  # overlaps the other widgets
         self._arrow_left.raise_()  # overlaps the other widgets
 
-    def _add_goto_home_button(self, layout):
-        layout.addWidget(
-            self._goto_home_button,
-            self._config.goto_home_button.origin_y,
-            self._config.goto_home_button.origin_x,
-            self._config.goto_home_button.height,
-            self._config.goto_home_button.width,
-        )
-    
     def _add_arrow_left(self, layout):
         layout.addWidget(
             self._arrow_left,

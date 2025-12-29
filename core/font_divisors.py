@@ -29,8 +29,6 @@ class FontDivisors:
     @classmethod
     def _derive_profile_from_reference(cls, screen_width: int) -> dict:
         scale = screen_width / cls.REF_WIDTH
-        print(f"this is the scale {scale}")
-        print(f"this is the screen width {screen_width}")
         derived = {}
         for name, base_divisor in cls.BASE_FONT_DIVISORS.items():
             derived[name] = max(1, int(math.ceil(base_divisor * scale)))
