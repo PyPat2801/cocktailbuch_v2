@@ -4,14 +4,11 @@ from PySide6.QtWidgets import QLabel
 from core import Rectangle
 
 
-class DescriptionTemplate(QLabel):
+class ImageTemplate(QLabel):
     def __init__(self, config: Rectangle):
         super().__init__()
         self._config = config
 
     def initialize(self):
-        self.setStyleSheet("""
-                    QLabel {
-                        border: 1px solid green;
-                    }
-                """)
+        self.setStyleSheet("background-color: blue")
+

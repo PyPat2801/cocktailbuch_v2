@@ -63,13 +63,19 @@ def create_config():
             arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
             drink_title=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=4, origin_y=7, width=19, height=11),
+            drink_ingredients=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
             drink_description=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
-            drink_type=Rectangle(origin_x=1, origin_y=28, width=21, height=2),
+            drink_type=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
             drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
         ),
-        add_drinks_page=AddDrinksConfig(goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
-                                        title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7))
+        add_drinks_page=AddDrinksConfig(
+            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
+            title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
+            ingredients_template=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
+            description_template=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
+            type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
+            image_template=Rectangle(origin_x=26, origin_y=1, width=21, height=28)
+        )
     )
     return config
 

@@ -28,6 +28,10 @@ class HomePageConfig:
 class AddDrinksConfig:
     goto_home_button: Rectangle
     title_template: Rectangle
+    ingredients_template: Rectangle
+    description_template: Rectangle
+    type_template: Rectangle
+    image_template: Rectangle
 
 
 @dataclass

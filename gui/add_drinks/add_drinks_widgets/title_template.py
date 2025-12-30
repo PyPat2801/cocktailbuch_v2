@@ -12,7 +12,7 @@ class TitleTemplate(QLabel):
     def initialize(self):
         self.setStyleSheet("""
                     QLabel {
-                        background-color: green;
+                        border: 1px solid yellow;
                     }
                 """)
 
