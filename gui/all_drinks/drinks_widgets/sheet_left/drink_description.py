@@ -15,7 +15,7 @@ class DrinkDescription(QLabel):
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_description)
-        self.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setWordWrap(True)
 
     def resizeEvent(self, event):

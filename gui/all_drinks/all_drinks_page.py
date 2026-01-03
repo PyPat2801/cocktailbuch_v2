@@ -135,7 +135,7 @@ class AllDrinksPage(BaseLayer):
     def swap_pages(self):
         drink_title = self._drink_title
         cocktail_title_text = self._database.cocktail_names[self.current_cocktail_index]
-        drink_title.setText(cocktail_title_text)
+        drink_title.set_text(cocktail_title_text)
 
         drink_ingredients = self._drink_ingredients
         cocktail_ingredients_text = self._database.cocktail_ingredients[self.current_cocktail_index]

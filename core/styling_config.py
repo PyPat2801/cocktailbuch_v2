@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class ArrowBarStyle:
     background: str = "background-color: white; border: 1px solid white"
@@ -7,12 +8,24 @@ class ArrowBarStyle:
 
 @dataclass
 class SheetLeftStyle:
+
     drink_title: str = """
-        color: white;
-        background-color: transparent;
-        font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
-        font-weight: bold;
-        font-size: {font_size}px;
+        QLabel {{
+            color: white;
+            background-color: transparent;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+        }}
+        
+        QLineEdit {{
+            color: white;
+            background-color: transparent;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+            border: 1px solid gray;
+        }}
     """
 
     drink_ingredients: str = """
@@ -30,13 +43,56 @@ class SheetLeftStyle:
             background-color: gray;
             font-size: {font_size}px;
         }}
+        QPlainTextEdit {{
+            color: white;
+            background-color: transparent;
+            font-size: {font_size}px;
+            border: 1px solid gray;
+        }}
     """
     drink_description: str = """
-        color: white;
-        background-color: transparent;
-        font-size: {font_size}px;
+        QLabel {{
+            color: white;
+            background-color: transparent;
+            font-size: {font_size}px;
+        }}
+        
+        QPlainTextEdit {{
+            color: white;
+            background-color: transparent;
+            font-size: {font_size}px;
+            border: 1px solid gray;
+        }}
     """
     drink_type: str = drink_title
+
+
+@dataclass
+class SheetRightStyle:
+    drink_image: str = """
+        color: gray;
+        border: 3px solid gray;
+        background-color: transparent;
+        font-size: 30px;
+    """
+
+    confirm_button: str = """
+            QPushButton {
+                color: white;
+                border: 3px solid gray;
+                background-color: transparent;
+                font-size: 30px;
+                font-weight: bold;
+            }
+
+            QPushButton:hover {
+                border-color: white;
+            }
+
+            QPushButton:pressed {
+                background-color: rgba(255, 255, 255, 30);
+            }
+        """
 
 
 @dataclass
@@ -53,11 +109,13 @@ class HomeTextStyle:
 class AllDrinksStyle:
     arrow_style: ArrowBarStyle
     sheet_left_style: SheetLeftStyle
+    sheet_right_style: SheetRightStyle
 
 
 @dataclass
 class AddDrinksStyle:
-    pass
+    sheet_left_style: SheetLeftStyle
+    sheet_right_style: SheetRightStyle
 
 
 @dataclass

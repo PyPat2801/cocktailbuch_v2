@@ -6,7 +6,7 @@ import os
 from os.path import exists
 from PySide6.QtWidgets import QApplication
 from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
-    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle
+    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -63,7 +63,7 @@ def create_config():
             arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
             drink_title=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
+            drink_ingredients=Rectangle(origin_x=2, origin_y=8, width=21, height=10),
             drink_description=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
             drink_type=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
             drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
@@ -71,10 +71,11 @@ def create_config():
         add_drinks_page=AddDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
             title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            ingredients_template=Rectangle(origin_x=2, origin_y=7, width=21, height=11),
+            ingredients_template=Rectangle(origin_x=2, origin_y=8, width=21, height=10),
             description_template=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
             type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
-            image_template=Rectangle(origin_x=26, origin_y=1, width=21, height=28)
+            image_template=Rectangle(origin_x=29, origin_y=1, width=17, height=24),
+            confirm_drink_button=Rectangle(origin_x=34, origin_y=26, width=7, height=3)
         )
     )
     return config
@@ -85,12 +86,16 @@ def create_styling():
         main_window_style=MainWindowStyle(
             all_drinks_style=AllDrinksStyle(
                 sheet_left_style=SheetLeftStyle(),
+                sheet_right_style=SheetRightStyle(),
                 arrow_style=ArrowBarStyle()
             ),
             home_style=HomeStyle(
                 text_style=HomeTextStyle()
             ),
-            add_drinks_style=AddDrinksStyle()
+            add_drinks_style=AddDrinksStyle(
+                sheet_left_style=SheetLeftStyle(),
+                sheet_right_style=SheetRightStyle()
+            )
         )
     )
     return styling

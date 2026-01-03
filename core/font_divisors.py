@@ -9,9 +9,9 @@ class FontDivisors:
     # Referenz-Parametersatz (gültig für 1920x1080)
     BASE_FONT_DIVISORS = {
         "font_ingredients": 18,
-        "font_title": 8,
-        "font_type": 15,
-        "font_description": 15,
+        "font_title": 5,
+        "font_type": 18,
+        "font_description": 20,
         "font_home_text": 7,
     }
 

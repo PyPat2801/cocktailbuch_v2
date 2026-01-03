@@ -19,7 +19,7 @@ class DrinkImage(QLabel):
         self.initialize_image()
 
     def initialize_image(self):
-        self._drink_image.setAlignment(Qt.AlignCenter)
+        self._drink_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self._layout)
         self.layout().addWidget(self._drink_image)
 
@@ -31,7 +31,7 @@ class DrinkImage(QLabel):
         self._original_pixmap = pixmap
         self.adjust_image_size()
 
-    def update_image(self,image_data):
+    def update_image(self, image_data):
         self._set_image(image_data)
 
     def adjust_image_size(self, width: Optional[int] = None, height: Optional[int] = None):

@@ -14,7 +14,8 @@ from .styling_config import (
     ArrowBarStyle,
     MainWindowStyle,
     SheetLeftStyle,
-    StylingConfig
+    StylingConfig,
+    SheetRightStyle
 )
 
 from .path_config import PathConfig

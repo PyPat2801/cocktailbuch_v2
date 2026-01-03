@@ -1,11 +1,13 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QFontMetrics
-from PySide6.QtWidgets import QLabel, QSizePolicy
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtGui import QFontMetrics, QFont
 
-from core import Rectangle, SheetLeftStyle, FontDivisors
+from core import Rectangle, FontDivisors, SheetLeftStyle
+from PySide6.QtWidgets import QLineEdit, QSizePolicy
 
 
-class DrinkTitle(QLabel):
+class TitleTemplate(QLineEdit):
+    confirmed = Signal(str)
+
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
         super().__init__()
         self._config = config
@@ -15,34 +17,32 @@ class DrinkTitle(QLabel):
         self._set_style()
         self._update_font_size()
 
+        self.returnPressed.connect(self._emit_confirmed)
+        self.textChanged.connect(self._update_font_size)
+
     def _set_style(self):
+        self.setStyleSheet(self._styling.drink_title)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Ignored)
-        self.setMinimumHeight(0)
+        self.setPlaceholderText("Titel eingeben …")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._update_font_size()
 
-    def set_text(self, text: str):
-        self.setText(text)
-        self._update_font_size()
-
     def _update_font_size(self):
         text = (self.text() or "").strip()
 
-        # Berechnung der default Schriftgröße. Hier wird noch nicht berücksichtigt,
-        # dass ein nötiger Zeilenumbruch vorliegt und daher die fontsize reduziert werden muss.
-        # Das wird auch im resizeEvent getriggert
         widget_width = max(1, self.contentsRect().width())
+
         profile = FontDivisors.get_active_font_profile_for_widget(self)
         divisor = profile["font_title"]
         font_size = int(widget_width / divisor)
         font_size = max(12, min(120, font_size))
 
-        # Falls Text nicht in widget_width_passt, dann reduziere ihn
+        # Falls Text nicht in widget_width passt, dann reduziere ihn
         if text:
-            reserve = 5  # verhindere Kanteneffekte
+            reserve = 5
             target_width = max(1, widget_width - reserve)
 
             f = QFont(self.font())
@@ -56,3 +56,10 @@ class DrinkTitle(QLabel):
 
         style = self._styling.drink_title.format(font_size=font_size)
         self.setStyleSheet(style)
+
+    def get_value(self) -> str:
+        return self.text().strip()
+
+    def _emit_confirmed(self):
+        self.confirmed.emit(self.get_value())
+

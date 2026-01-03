@@ -32,6 +32,7 @@ class AddDrinksConfig:
     description_template: Rectangle
     type_template: Rectangle
     image_template: Rectangle
+    confirm_drink_button: Rectangle
 
 
 @dataclass
