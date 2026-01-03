@@ -1,3 +1,5 @@
+from pathlib import Path
+import re
 
 from gui.add_drinks.add_drinks_widgets import TitleTemplate, IngredientsTemplate, DescriptionTemplate, TypeTemplate, ImageTemplate, ConfirmDrinkButton
 from gui.base_layer import BaseLayer
@@ -5,12 +7,17 @@ from core import AddDrinksConfig, DataBase, AddDrinksStyle
 
 
 class AddDrinksPage(BaseLayer):
-    def __init__(self, configuration: AddDrinksConfig, styling: AddDrinksStyle, path: str, goto_home_callback, database: DataBase):
-        super().__init__(configuration.goto_home_button, path, goto_home_callback)
+    def __init__(self, configuration: AddDrinksConfig, styling: AddDrinksStyle, path: str, goto_home_callback,
+                 goto_all_drinks_callback, database: DataBase):
+
+        self._goto_home_callback = goto_home_callback
+
+        super().__init__(configuration.goto_home_button, path, self._on_goto_home_clicked)
 
         self._config = configuration
         self._styling = styling
         self._database = database
+        self._goto_all_drinks_callback = goto_all_drinks_callback
 
         self._drink_title = TitleTemplate(configuration.title_template, styling.sheet_left_style)
         self._drink_ingredients = IngredientsTemplate(configuration.ingredients_template, styling.sheet_left_style)
@@ -38,6 +45,8 @@ class AddDrinksPage(BaseLayer):
 
         self.setLayout(layout)
         self._goto_home_button.raise_()  # overlaps the other widgets
+
+        self._confirm_drink_button.clicked.connect(self._on_confirm_clicked)
 
     def _add_title_template(self, layout):
         layout.addWidget(
@@ -93,3 +102,70 @@ class AddDrinksPage(BaseLayer):
             self._config.confirm_drink_button.width,
         )
 
+    def _on_confirm_clicked(self):
+        recipe_data = self._collect_recipe_data()
+        if recipe_data is None:
+            return
+
+        raw_ingredients = self._drink_ingredients.get_value()
+        recipe_data["ingredients"] = self.ingredients_to_db_string(raw_ingredients)
+        self._database.add_recipe(recipe_data)
+        self._leave_page(
+            self._goto_all_drinks_callback,
+            jump_to_last=True
+        )
+
+    @staticmethod
+    def ingredients_to_db_string(raw: str) -> str:
+        lines = raw.splitlines()
+
+        cleaned = []
+        for line in lines:
+            line = re.sub(r"^\s*[•\-\*]\s*", "", line).strip()
+            if line:
+                cleaned.append(line)
+
+        return ", ".join(cleaned)
+
+    def _collect_recipe_data(self):
+        name = self._drink_title.get_value()
+        ingredients = self._drink_ingredients.get_value()
+        description = self._drink_description.get_value()
+        drink_type = self._drink_type.get_value()
+
+        image_bytes = self._get_image_bytes_from_template()
+
+        if not name or not ingredients or not description or not drink_type:
+            return None
+
+        return {
+            "name": name,
+            "ingredients": ingredients,
+            "description": description,
+            "type": drink_type,
+            "image": image_bytes,
+        }
+
+    def _get_image_bytes_from_template(self):
+        path = self._drink_image.get_image_path()
+        if not path:
+            return None
+
+        try:
+            return Path(path).read_bytes()
+        except OSError:
+            return None
+
+    def _leave_page(self, navigate_callback, **kwargs) -> None:
+        self.reset_inputs()
+        navigate_callback(**kwargs)
+
+    def reset_inputs(self) -> None:
+        self._drink_title.clear()
+        self._drink_ingredients.clear()
+        self._drink_description.clear()
+        self._drink_type.clear()
+        self._drink_image.clear()
+
+    def _on_goto_home_clicked(self) -> None:
+        self._leave_page(self._goto_home_callback)

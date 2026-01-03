@@ -5,7 +5,6 @@ from core import Rectangle, SheetLeftStyle, FontDivisors
 
 
 class TypeTemplate(QLineEdit):
-    confirmed = Signal(str)
 
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
         super().__init__()
@@ -14,8 +13,6 @@ class TypeTemplate(QLineEdit):
 
     def initialize(self):
         self._set_style()
-
-        self.returnPressed.connect(self._emit_confirmed)
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_title)
@@ -38,6 +35,3 @@ class TypeTemplate(QLineEdit):
 
     def get_value(self) -> str:
         return self.text().strip()
-
-    def _emit_confirmed(self):
-        self.confirmed.emit(self.get_value())

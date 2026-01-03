@@ -6,6 +6,9 @@ from core.utility import Utility
 class DataBase:
     def __init__(self, file_name):
         self.conn = sqlite3.connect(file_name)
+        self.refresh_cache()
+
+    def refresh_cache(self):
         self.cocktail_names: List[str] = self.get_cocktail_attributes("name")
         self.cocktail_types: List[str] = sorted(list(set(self.get_cocktail_attributes("type"))))
         self.cocktail_types_unsorted: List[str] = self.get_cocktail_attributes("type")
@@ -97,5 +100,13 @@ class DataBase:
         except sqlite3.OperationalError as e:
             print(str(e))
         return cocktail_attributes
+
+    def add_recipe(self, recipe_data):
+        c = self.conn.cursor()
+        c.execute("INSERT INTO cocktails (name, ingredients, description, type, image) VALUES (?, ?, ?, ?, ?)",
+                            (recipe_data['name'], recipe_data['ingredients'], recipe_data['description'],
+                             recipe_data["type"], recipe_data['image']))
+        self.conn.commit()
+        self.refresh_cache()
 
 

@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         self._pages = QStackedWidget()
         self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path, self._show_all_drinks_page, self._show_add_drinks_page, database)
         self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style, paths.image_all_drinks_path, self._show_home_page, database)
-        self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style, paths.image_add_drinks_path, self._show_home_page, database)
+        self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style, paths.image_add_drinks_path, self._show_home_page, self._show_all_drinks_page, database)
 
     def initialize(self):
         self._set_window_format()
@@ -69,9 +69,11 @@ class MainWindow(QMainWindow):
             layout.setColumnStretch(x, 1)
 
     def _show_home_page(self):
+        self._all_drinks_page.reset_cocktail_index()
         self._show_page(0)
 
-    def _show_all_drinks_page(self):
+    def _show_all_drinks_page(self, jump_to_last: bool = False):
+        self._all_drinks_page.on_show(jump_to_last=jump_to_last)
         self._show_page(1)
 
     def _show_add_drinks_page(self):
@@ -79,4 +81,5 @@ class MainWindow(QMainWindow):
 
     def _show_page(self, index):
         self._pages.setCurrentIndex(index)
+
 

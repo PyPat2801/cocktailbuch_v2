@@ -6,7 +6,6 @@ from PySide6.QtWidgets import QLineEdit, QSizePolicy
 
 
 class TitleTemplate(QLineEdit):
-    confirmed = Signal(str)
 
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
         super().__init__()
@@ -17,7 +16,6 @@ class TitleTemplate(QLineEdit):
         self._set_style()
         self._update_font_size()
 
-        self.returnPressed.connect(self._emit_confirmed)
         self.textChanged.connect(self._update_font_size)
 
     def _set_style(self):
@@ -60,6 +58,4 @@ class TitleTemplate(QLineEdit):
     def get_value(self) -> str:
         return self.text().strip()
 
-    def _emit_confirmed(self):
-        self.confirmed.emit(self.get_value())
 

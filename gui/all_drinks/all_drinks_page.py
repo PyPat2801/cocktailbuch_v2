@@ -155,3 +155,23 @@ class AllDrinksPage(BaseLayer):
         cocktail_image_data = self._database.cocktail_images[self.current_cocktail_index]
         drink_image.update_image(cocktail_image_data)
 
+    def on_show(self, jump_to_last: bool = False) -> None:
+        self._database.refresh_cache()
+
+        if len(self._database.cocktail_names) == 0:
+            self.current_cocktail_index = 0
+            return
+
+        if jump_to_last:
+            self.current_cocktail_index = len(self._database.cocktail_names) - 1
+        else:
+            self.current_cocktail_index = min(
+                self.current_cocktail_index,
+                len(self._database.cocktail_names) - 1
+            )
+
+        self.swap_pages()
+
+    def reset_cocktail_index(self) -> None:
+        self.current_cocktail_index = 0
+

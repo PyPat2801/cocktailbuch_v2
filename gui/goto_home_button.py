@@ -22,7 +22,7 @@ class GotoHomeButton(QPushButton):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("logo_transparent.png", self._path))
+        pixmap = QPixmap(Utility.get_image_path("logo.png", self._path))
         self.image_label.setPixmap(pixmap)
 
         if self._callback:

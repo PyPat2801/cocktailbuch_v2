@@ -38,6 +38,13 @@ class ImageTemplate(QLabel):
     def get_image_path(self) -> Optional[str]:
         return self._image_path
 
+    def clear(self) -> None:
+        self._image_path = None
+        self._original_pixmap = None
+
+        self._image.clear()
+        self._image.setText("Klick: Bild auswählen")
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self._open_file_dialog()
@@ -63,15 +70,6 @@ class ImageTemplate(QLabel):
         self.adjust_image_size()
         self._image.setText("")
         self.image_selected.emit(path)
-
-    def update_image_from_bytes(self, image_data: bytes):
-        """Optional: falls später Bytes (z. B. aus DB) gesetzt werden sollen, analog zu DrinkImage."""
-        pixmap = QPixmap()
-        if not pixmap.loadFromData(image_data):
-            return
-        self._original_pixmap = pixmap
-        self.adjust_image_size()
-        self._image.setText("")
 
     def adjust_image_size(self, width: Optional[int] = None, height: Optional[int] = None):
         if self._original_pixmap is None:

@@ -1,6 +1,5 @@
 from typing import Optional
 
-from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QPlainTextEdit, QSizePolicy
 
 from PySide6.QtGui import QTextOption, QShortcut, QKeySequence
@@ -9,7 +8,6 @@ from core import Rectangle, SheetLeftStyle, FontDivisors
 
 
 class DescriptionTemplate(QPlainTextEdit):
-    confirmed = Signal(str)
 
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
         super().__init__()
@@ -18,7 +16,6 @@ class DescriptionTemplate(QPlainTextEdit):
         self._current_font_size: Optional[int] = None
 
         self._confirm_shortcut = QShortcut(QKeySequence("Ctrl+Return"), self)
-        self._confirm_shortcut.activated.connect(self._emit_confirmed)
 
     def initialize(self):
         self._set_style()
@@ -49,6 +46,3 @@ class DescriptionTemplate(QPlainTextEdit):
 
     def get_value(self) -> str:
         return self.toPlainText().strip()
-
-    def _emit_confirmed(self):
-        self.confirmed.emit(self.get_value())

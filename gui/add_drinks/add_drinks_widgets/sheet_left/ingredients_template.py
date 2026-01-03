@@ -14,8 +14,6 @@ class IngredientsTemplate(QPlainTextEdit):
     - Enter: neue Zeile + Bullet-Präfix
     - Ctrl+Enter: confirmed-Signal
     """
-
-    confirmed = Signal(str)
     BULLET = "• "
 
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
@@ -26,7 +24,6 @@ class IngredientsTemplate(QPlainTextEdit):
         self._current_font_size: Optional[int] = None
 
         self._confirm_shortcut = QShortcut(QKeySequence("Ctrl+Return"), self)
-        self._confirm_shortcut.activated.connect(self._emit_confirmed)
 
     def initialize(self):
         self._set_style()
@@ -98,5 +95,3 @@ class IngredientsTemplate(QPlainTextEdit):
     def get_value(self) -> str:
         return self.toPlainText().strip()
 
-    def _emit_confirmed(self):
-        self.confirmed.emit(self.get_value())
