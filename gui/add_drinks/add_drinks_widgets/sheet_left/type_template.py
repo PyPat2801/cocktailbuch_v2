@@ -17,7 +17,7 @@ class TypeTemplate(QLineEdit):
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_title)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setPlaceholderText("Typ eingeben …")
 
     def resizeEvent(self, event):

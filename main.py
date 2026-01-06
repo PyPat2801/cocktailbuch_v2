@@ -50,32 +50,39 @@ def create_config():
     window_width, window_height = set_app_resolution()
     config = GuiConfig(
         window=Rectangle(100, 100, window_width, window_height),
-        grid=GridSpan(width=50, height=30),
+        grid=GridSpan(width=50, height=32),
         home_page=HomePageConfig(
-            home_icon=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
-            home_text=Rectangle(origin_x=10, origin_y=1, width=30, height=13),
-            goto_drinks_button=Rectangle(origin_x=1, origin_y=18, width=7, height=8),
-            add_drinks_button=Rectangle(origin_x=15, origin_y=18, width=7, height=8),
-            find_drinks_button=Rectangle(origin_x=29, origin_y=18, width=7, height=8)
+            home_icon=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
+            home_text=Rectangle(origin_x=10, origin_y=1, width=30, height=14),
+            goto_drinks_button=Rectangle(origin_x=1, origin_y=18, width=7, height=9),
+            goto_add_drinks_button=Rectangle(origin_x=11, origin_y=18, width=7, height=9),
+            goto_find_drinks_button=Rectangle(origin_x=21, origin_y=18, width=7, height=9),
+            goto_gallery_button=Rectangle(origin_x=31, origin_y=18, width=7, height=9),
+            goto_inventory_button=Rectangle(origin_x=41, origin_y=18, width=7, height=9),
+            label_drinks_text=Rectangle(origin_x=1, origin_y=28, width=7, height=3),
+            label_add_text=Rectangle(origin_x=11, origin_y=28, width=7, height=3),
+            label_search_text=Rectangle(origin_x=21, origin_y=28, width=7, height=3),
+            label_gallery_text=Rectangle(origin_x=31, origin_y=28, width=7, height=3),
+            label_inventory_text=Rectangle(origin_x=41, origin_y=28, width=7, height=3),
         ),
         all_drinks_page=AllDrinksConfig(
-            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
+            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
             arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
-            drink_title=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=2, origin_y=8, width=21, height=10),
-            drink_description=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
-            drink_type=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
-            drink_image=Rectangle(origin_x=26, origin_y=1, width=21, height=28),
+            drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=7),
+            drink_ingredients=Rectangle(origin_x=2, origin_y=9, width=21, height=10),
+            drink_description=Rectangle(origin_x=2, origin_y=20, width=21, height=8),
+            drink_type=Rectangle(origin_x=2, origin_y=29, width=21, height=3),
+            drink_image=Rectangle(origin_x=26, origin_y=2, width=21, height=28),
         ),
         add_drinks_page=AddDrinksConfig(
-            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=5),
-            title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            ingredients_template=Rectangle(origin_x=2, origin_y=8, width=21, height=10),
-            description_template=Rectangle(origin_x=2, origin_y=19, width=21, height=8),
-            type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=2),
-            image_template=Rectangle(origin_x=29, origin_y=1, width=17, height=24),
-            confirm_drink_button=Rectangle(origin_x=34, origin_y=26, width=7, height=3)
+            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
+            title_template=Rectangle(origin_x=2, origin_y=1, width=21, height=7),
+            ingredients_template=Rectangle(origin_x=2, origin_y=9, width=21, height=10),
+            description_template=Rectangle(origin_x=2, origin_y=20, width=21, height=7),
+            type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=3),
+            image_template=Rectangle(origin_x=29, origin_y=2, width=17, height=25),
+            confirm_drink_button=Rectangle(origin_x=34, origin_y=28, width=7, height=3)
         )
     )
     return config

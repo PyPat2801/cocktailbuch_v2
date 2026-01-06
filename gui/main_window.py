@@ -53,8 +53,8 @@ class MainWindow(QMainWindow):
 
     def create_coordinate_label(self, x: int, y: int):
         cell = QLabel()
-        cell.setAlignment(Qt.AlignCenter)
-        cell.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        cell.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        cell.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         cell.setStyleSheet("""
             QLabel {
                 background-color: black;

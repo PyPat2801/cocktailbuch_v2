@@ -1,7 +1,7 @@
-from .home_button import HomeButton
+from .base_button import BaseButton
 
 
-class GotoDrinksButton(HomeButton):
+class GotoDrinksButton(BaseButton):
     def __init__(self, path, goto_all_drinks_callback):
         super().__init__(
             path, 

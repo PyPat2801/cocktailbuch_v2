@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QLabel
 from PySide6.QtGui import Qt
-from core import Rectangle, HomeTextStyle, FontDivisors
+from core import HomeTextStyle, FontDivisors
 
 
 class HomeText(QLabel):
@@ -30,5 +30,4 @@ class HomeText(QLabel):
 
         style = self._styling.text_style.format(font_size=font_size)
         self.setStyleSheet(style)
-
 

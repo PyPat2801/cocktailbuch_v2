@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QPushButton, QSizePolicy, QLabel
 from core.utility import Utility
 
 
-class HomeButton(QPushButton):
+class BaseButton(QPushButton):
     def __init__(self, path, styling, display_image_filename):
         super().__init__()
         self._path = path

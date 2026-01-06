@@ -1,12 +1,12 @@
-from .home_button import HomeButton
+from .base_button import BaseButton
 
 
-class AddDrinksButton(HomeButton):
+class GoToAddDrinksButton(BaseButton):
     def __init__(self, path, goto_add_drinks_callback):
         super().__init__(
             path,
             styling="background-color: transparent; border: none;",
-            display_image_filename="find_by_pic.png"
+            display_image_filename="add_drink.png"
         )
         self._callback = goto_add_drinks_callback
 

@@ -7,12 +7,15 @@ class FontDivisors:
     REF_HEIGHT = 1080
 
     # Referenz-Parametersatz (gültig für 1920x1080)
+    # Die Divisoren beziehen sich auf das widget, indem sich das skalierbare Objekt befindet
+    # -----> das sollte noch universell gesetzt werden
     BASE_FONT_DIVISORS = {
         "font_ingredients": 18,
         "font_title": 5,
         "font_type": 18,
         "font_description": 20,
         "font_home_text": 7,
+        "font_home_label": 4
     }
 
     @classmethod

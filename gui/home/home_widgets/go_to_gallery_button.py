@@ -1,10 +1,10 @@
-from .home_button import HomeButton
+from .base_button import BaseButton
 
 
-class FindDrinksButton(HomeButton):
+class GoToGalleryButton(BaseButton):
     def __init__(self, path):
         super().__init__(
             path,
             styling="background-color: transparent; border: none;",
-            display_image_filename="find_drinks.png"
+            display_image_filename="gallery.svg"
         )
