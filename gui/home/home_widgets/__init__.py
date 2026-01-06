@@ -5,9 +5,4 @@ from .go_to_inventory_button import GoToInventoryButton
 from .go_to_gallery_button import GoToGalleryButton
 from .home_icon import HomeIcon
 from .home_text import HomeText
-
-from .label_drinks import LabelDrinks
-from .label_add import LabelAdd
-from .label_search import LabelSearch
-from .label_gallery import LabelGallery
-from .label_inventory import LabelInventory
+from .base_text_label import BaseTextLabel
