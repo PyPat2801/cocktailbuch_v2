@@ -16,7 +16,7 @@ class GotoHomeButton(QPushButton):
 
     def _set_style(self):
         self.setStyleSheet("background-color: transparent; border: none;")
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def _initialize_image_label(self):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)

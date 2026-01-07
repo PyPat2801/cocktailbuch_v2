@@ -2,6 +2,11 @@ from dataclasses import dataclass
 
 
 @dataclass
+class GlobalParams:
+    delete_password: str
+
+
+@dataclass
 class Rectangle:
     origin_x: int
     origin_y: int
@@ -54,6 +59,8 @@ class AllDrinksConfig:
     drink_description: Rectangle
     drink_type: Rectangle
     drink_image: Rectangle
+    drink_delete: Rectangle
+    global_params: GlobalParams
 
 
 @dataclass

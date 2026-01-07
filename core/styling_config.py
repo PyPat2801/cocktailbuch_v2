@@ -8,7 +8,6 @@ class ArrowBarStyle:
 
 @dataclass
 class SheetLeftStyle:
-
     drink_title: str = """
         QLabel {{
             color: white;
@@ -91,6 +90,12 @@ class SheetRightStyle:
 
             QPushButton:pressed {
                 background-color: rgba(255, 255, 255, 30);
+            }
+            
+            QPushButton:disabled {
+                color: rgba(255, 255, 255, 80);
+                border-color: rgba(255, 255, 255, 60);
+                background-color: rgba(255, 255, 255, 10);
             }
         """
 

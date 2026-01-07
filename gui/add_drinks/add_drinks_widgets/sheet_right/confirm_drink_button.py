@@ -11,6 +11,6 @@ class ConfirmDrinkButton(QPushButton):
         self._styling = styling
 
     def initialize(self):
-        self.setText("Confirm")
+        self.setText("Bestätigen")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setStyleSheet(self._styling.confirm_button)

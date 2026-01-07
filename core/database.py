@@ -109,4 +109,11 @@ class DataBase:
         self.conn.commit()
         self.refresh_cache()
 
+    def delete_cocktail(self, cocktail_name: str) -> int:
+        c = self.conn.cursor()
+        c.execute("DELETE FROM cocktails WHERE name = ?", (cocktail_name,))
+        deleted_rows = c.rowcount
+        self.conn.commit()
+        return deleted_rows
+
 

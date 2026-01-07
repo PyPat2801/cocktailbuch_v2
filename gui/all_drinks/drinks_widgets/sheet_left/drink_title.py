@@ -2,13 +2,12 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtWidgets import QLabel, QSizePolicy
 
-from core import Rectangle, SheetLeftStyle, FontDivisors
+from core import SheetLeftStyle, FontDivisors
 
 
 class DrinkTitle(QLabel):
-    def __init__(self, config: Rectangle, styling: SheetLeftStyle):
+    def __init__(self, styling: SheetLeftStyle):
         super().__init__()
-        self._config = config
         self._styling = styling
 
     def initialize(self):

@@ -43,6 +43,7 @@ def set_app_resolution() -> tuple[int, int]:
     width = math.ceil(geometry.width() * 0.7)
     height = math.ceil(geometry.height() * 0.7)
 
+    print(width, height)
     return width, height
 
 
@@ -69,11 +70,13 @@ def create_config():
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
             arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
-            drink_title=Rectangle(origin_x=2, origin_y=1, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=2, origin_y=9, width=21, height=10),
-            drink_description=Rectangle(origin_x=2, origin_y=20, width=21, height=8),
-            drink_type=Rectangle(origin_x=2, origin_y=29, width=21, height=3),
-            drink_image=Rectangle(origin_x=26, origin_y=2, width=21, height=28),
+            drink_title=Rectangle(origin_x=7, origin_y=1, width=21, height=7),
+            drink_ingredients=Rectangle(origin_x=7, origin_y=9, width=21, height=10),
+            drink_description=Rectangle(origin_x=7, origin_y=20, width=21, height=8),
+            drink_type=Rectangle(origin_x=7, origin_y=29, width=21, height=3),
+            drink_image=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
+            drink_delete=Rectangle(origin_x=1, origin_y=28, width=3, height=5),
+            global_params=GlobalParams(delete_password="1708")
         ),
         add_drinks_page=AddDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),

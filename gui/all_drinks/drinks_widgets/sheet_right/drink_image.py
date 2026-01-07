@@ -6,11 +6,10 @@ from PySide6.QtCore import Qt, QSize
 
 
 class DrinkImage(QLabel):
-    def __init__(self, config, database):
+    def __init__(self, database):
         super().__init__()
-        self._config = config
         self._database = database
-        self._drink_image = QLabel(self)
+        self.drink_image = QLabel(self)
         self._layout = QVBoxLayout()
 
         self._original_pixmap: Optional[QPixmap] = None
@@ -19,9 +18,9 @@ class DrinkImage(QLabel):
         self.initialize_image()
 
     def initialize_image(self):
-        self._drink_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.drink_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self._layout)
-        self.layout().addWidget(self._drink_image)
+        self.layout().addWidget(self.drink_image)
 
     def _set_image(self, image_data: bytes):
         pixmap = QPixmap()
@@ -39,8 +38,8 @@ class DrinkImage(QLabel):
             return
 
         if width is None or height is None:
-            width = self._drink_image.width()
-            height = self._drink_image.height()
+            width = self.drink_image.width()
+            height = self.drink_image.height()
         if width <= 0 or height <= 0:
             return
 
@@ -65,8 +64,12 @@ class DrinkImage(QLabel):
 
         image_cropped = scaled_pixmap.copy(x, y, target_size.width(), target_size.height())
 
-        self._drink_image.setPixmap(image_cropped)
-        self._drink_image.setScaledContents(False)
+        self.drink_image.setPixmap(image_cropped)
+        self.drink_image.setScaledContents(False)
+
+    def clear_image(self) -> None:
+        self._original_pixmap = None
+        self.drink_image.clear()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

@@ -1,6 +1,8 @@
+from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
+
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
 from gui.all_drinks.drinks_widgets import ArrowBar
-from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType
+from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType, DrinkDelete
 from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage
 
 from gui.base_layer import BaseLayer
@@ -19,12 +21,14 @@ class AllDrinksPage(BaseLayer):
         self._arrow_left = ArrowBar("<=", self.scroll_left, styling.arrow_style)
         self._arrow_right = ArrowBar("=>", self.scroll_right, styling.arrow_style)
 
-        self._drink_title = DrinkTitle(configuration.drink_title, styling.sheet_left_style)
-        self._drink_ingredients = DrinkIngredients(configuration.drink_ingredients, styling.sheet_left_style)
-        self._drink_description = DrinkDescription(configuration.drink_description, styling.sheet_left_style)
-        self._drink_type = DrinkType(configuration.drink_type, styling.sheet_left_style)
+        self._drink_title = DrinkTitle(styling.sheet_left_style)
+        self._drink_ingredients = DrinkIngredients(styling.sheet_left_style)
+        self._drink_description = DrinkDescription(styling.sheet_left_style)
+        self._drink_type = DrinkType(styling.sheet_left_style)
 
-        self._drink_image = DrinkImage(configuration.drink_image, self._database)
+        self._drink_image = DrinkImage(self._database)
+
+        self._drink_delete = DrinkDelete(path, delete_callback=self._on_delete_clicked)
 
     def initialize(self, layout):
         super().initialize(layout)
@@ -44,6 +48,8 @@ class AllDrinksPage(BaseLayer):
 
         self._drink_image.initialize()
 
+        self._drink_delete.initialize()
+
     def _add_home_page_widgets(self, layout):
         self._add_arrow_left(layout)
         self._add_arrow_right(layout)
@@ -54,6 +60,7 @@ class AllDrinksPage(BaseLayer):
         self._add_drink_type(layout)
 
         self._add_drink_image(layout)
+        self._add_drink_delete(layout)
 
         self.setLayout(layout)
 
@@ -123,6 +130,15 @@ class AllDrinksPage(BaseLayer):
             self._config.drink_image.width,
         )
 
+    def _add_drink_delete(self, layout):
+        layout.addWidget(
+            self._drink_delete,
+            self._config.drink_delete.origin_y,
+            self._config.drink_delete.origin_x,
+            self._config.drink_delete.height,
+            self._config.drink_delete.width,
+        )
+
     def scroll_left(self):
         self.current_cocktail_index = max(0, self.current_cocktail_index - 1)
         self.swap_pages()
@@ -174,4 +190,69 @@ class AllDrinksPage(BaseLayer):
 
     def reset_cocktail_index(self) -> None:
         self.current_cocktail_index = 0
+
+    def reset_cocktail_view(self) -> None:
+        self._database.refresh_cache()
+        if len(self._database.cocktail_names) == 0:
+            self.current_cocktail_index = 0
+            self._clear_view()
+            return
+        self.current_cocktail_index = min(
+            self.current_cocktail_index,
+            len(self._database.cocktail_names) - 1
+        )
+        self.swap_pages()
+
+    def _on_delete_clicked(self) -> None:
+
+        if not self._database.cocktail_names:
+            QMessageBox.information(self, "Löschen", "Es ist kein Cocktail vorhanden.")
+            return
+
+        cocktail_name = self._database.cocktail_names[self.current_cocktail_index]
+
+        password, ok = QInputDialog.getText(
+            self,
+            "Cocktail löschen",
+            f"Passwort eingeben, um „{cocktail_name}“ zu löschen:",
+            QLineEdit.Password
+        )
+        if not ok:
+            return
+
+        if password != self._config.global_params.delete_password:
+            QMessageBox.warning(self, "Löschen", "Passwort ist nicht korrekt.")
+            return
+
+        confirm = QMessageBox.question(
+            self,
+            "Cocktail löschen",
+            f"Soll „{cocktail_name}“ wirklich gelöscht werden?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if confirm != QMessageBox.Yes:
+            return
+
+        deleted_rows = self._database.delete_cocktail(cocktail_name)
+        if deleted_rows <= 0:
+            QMessageBox.warning(self, "Löschen", "Der Cocktail konnte nicht gelöscht werden.")
+            return
+
+        if deleted_rows > 0:
+            self.reset_cocktail_view()
+
+    def _clear_view(self) -> None:
+        # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht
+        self._drink_title.set_text("")
+        self._drink_ingredients.set_text("")
+        self._drink_description.setText("")
+        self._drink_type.setText("")
+
+        try:
+            self._drink_image.clear_image()
+        except AttributeError:
+            self._drink_image._original_pixmap = None
+            self._drink_image.drink_image.clear()
+
+
 

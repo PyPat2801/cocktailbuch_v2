@@ -46,7 +46,13 @@ class AddDrinksPage(BaseLayer):
         self.setLayout(layout)
         self._goto_home_button.raise_()  # overlaps the other widgets
 
+        self._set_confirm_button_status()
+
+    def _set_confirm_button_status(self):
         self._confirm_drink_button.clicked.connect(self._on_confirm_clicked)
+        self._confirm_drink_button.setEnabled(False)
+        self._wire_validation_signals()
+        self._update_confirm_button_state()
 
     def _add_title_template(self, layout):
         layout.addWidget(
@@ -167,5 +173,27 @@ class AddDrinksPage(BaseLayer):
         self._drink_type.clear()
         self._drink_image.clear()
 
+        self._confirm_drink_button.setEnabled(False)
+
     def _on_goto_home_clicked(self) -> None:
         self._leave_page(self._goto_home_callback)
+
+    def _wire_validation_signals(self) -> None:
+        self._drink_title.textChanged.connect(self._update_confirm_button_state)
+        self._drink_type.textChanged.connect(self._update_confirm_button_state)
+        self._drink_ingredients.textChanged.connect(self._update_confirm_button_state)
+        self._drink_description.textChanged.connect(self._update_confirm_button_state)
+        self._drink_image.image_selected.connect(lambda _path: self._update_confirm_button_state())
+
+    def _update_confirm_button_state(self) -> None:
+        self._confirm_drink_button.setEnabled(self._all_inputs_valid())
+
+    def _all_inputs_valid(self) -> bool:
+        name_ok = bool(self._drink_title.get_value())
+        raw_ingredients = self._drink_ingredients.get_value()
+        ingredients_ok = bool(self.ingredients_to_db_string(raw_ingredients))
+        description_ok = bool(self._drink_description.get_value())
+        type_ok = bool(self._drink_type.get_value())
+        image_ok = bool(self._drink_image.get_image_path())
+
+        return name_ok and ingredients_ok and description_ok and type_ok and image_ok

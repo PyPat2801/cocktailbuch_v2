@@ -1,13 +1,13 @@
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QLabel, QSizePolicy
 
-from core import Rectangle, SheetLeftStyle, FontDivisors
+from core import SheetLeftStyle, FontDivisors
 
 
 class DrinkIngredients(QScrollArea):
-    def __init__(self, config: Rectangle, styling: SheetLeftStyle):
+    def __init__(self, styling: SheetLeftStyle):
         super().__init__()
-        self._config = config
+
         self._styling = styling
 
         self._content_widget = QWidget()
