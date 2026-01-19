@@ -59,7 +59,9 @@ class AllDrinksConfig:
     drink_description: Rectangle
     drink_type: Rectangle
     drink_image: Rectangle
+    drink_rating_stars: Rectangle
     drink_delete: Rectangle
+    side_bar: Rectangle
     global_params: GlobalParams
 
 

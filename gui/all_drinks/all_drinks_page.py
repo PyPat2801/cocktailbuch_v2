@@ -3,7 +3,8 @@ from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
 from gui.all_drinks.drinks_widgets import ArrowBar
 from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType, DrinkDelete
-from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage
+from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage, DrinkRatingStars
+from gui.all_drinks.drinks_widgets.side_bar import SideBar
 
 from gui.base_layer import BaseLayer
 
@@ -15,6 +16,7 @@ class AllDrinksPage(BaseLayer):
         self._config = configuration
         self._styling = styling
         self._database = database
+        self._path = path
 
         self.current_cocktail_index = 0
 
@@ -27,17 +29,22 @@ class AllDrinksPage(BaseLayer):
         self._drink_type = DrinkType(styling.sheet_left_style)
 
         self._drink_image = DrinkImage(self._database)
+        self._drink_rating_stars = DrinkRatingStars(self._path)
 
+        self._side_bar = SideBar(styling.side_bar_style)
         self._drink_delete = DrinkDelete(path, delete_callback=self._on_delete_clicked)
 
     def initialize(self, layout):
         super().initialize(layout)
 
-        self._initialize_home_page_widgets()
-        self._add_home_page_widgets(layout)
+        self._initialize_all_drinks_widgets()
+        self._add_all_drinks_widgets(layout)
+
+        self._drink_rating_stars.rating_committed.connect(self._on_rating_clicked)
+
         self.swap_pages()
 
-    def _initialize_home_page_widgets(self):
+    def _initialize_all_drinks_widgets(self):
         self._arrow_left.initialize()
         self._arrow_right.initialize()
 
@@ -47,10 +54,12 @@ class AllDrinksPage(BaseLayer):
         self._drink_type.initialize()
 
         self._drink_image.initialize()
+        self._drink_rating_stars.initialize()
 
+        self._side_bar.initialize()
         self._drink_delete.initialize()
 
-    def _add_home_page_widgets(self, layout):
+    def _add_all_drinks_widgets(self, layout):
         self._add_arrow_left(layout)
         self._add_arrow_right(layout)
 
@@ -60,6 +69,9 @@ class AllDrinksPage(BaseLayer):
         self._add_drink_type(layout)
 
         self._add_drink_image(layout)
+        self._add_drink_rating_stars(layout)
+
+        self._add_side_bar(layout)
         self._add_drink_delete(layout)
 
         self.setLayout(layout)
@@ -130,6 +142,15 @@ class AllDrinksPage(BaseLayer):
             self._config.drink_image.width,
         )
 
+    def _add_drink_rating_stars(self, layout):
+        layout.addWidget(
+            self._drink_rating_stars,
+            self._config.drink_rating_stars.origin_y,
+            self._config.drink_rating_stars.origin_x,
+            self._config.drink_rating_stars.height,
+            self._config.drink_rating_stars.width,
+        )
+
     def _add_drink_delete(self, layout):
         layout.addWidget(
             self._drink_delete,
@@ -137,6 +158,15 @@ class AllDrinksPage(BaseLayer):
             self._config.drink_delete.origin_x,
             self._config.drink_delete.height,
             self._config.drink_delete.width,
+        )
+
+    def _add_side_bar(self, layout):
+        layout.addWidget(
+            self._side_bar,
+            self._config.side_bar.origin_y,
+            self._config.side_bar.origin_x,
+            self._config.side_bar.height,
+            self._config.side_bar.width,
         )
 
     def scroll_left(self):
@@ -171,6 +201,9 @@ class AllDrinksPage(BaseLayer):
         cocktail_image_data = self._database.cocktail_images[self.current_cocktail_index]
         drink_image.update_image(cocktail_image_data)
 
+        self._drink_rating_stars.reset_rating()
+        self._sync_rating_badge_from_cache()
+
     def on_show(self, jump_to_last: bool = False) -> None:
         self._database.refresh_cache()
 
@@ -202,6 +235,9 @@ class AllDrinksPage(BaseLayer):
             len(self._database.cocktail_names) - 1
         )
         self.swap_pages()
+
+    def reset_rating_view(self):
+        self._drink_rating_stars.reset_rating()
 
     def _on_delete_clicked(self) -> None:
 
@@ -240,6 +276,26 @@ class AllDrinksPage(BaseLayer):
 
         if deleted_rows > 0:
             self.reset_cocktail_view()
+
+    def _on_rating_clicked(self, stars: int) -> None:
+        cocktail_names = self._database.cocktail_names[self.current_cocktail_index]
+
+        new_avg = self._database.add_rating_for_cocktail(
+            cocktail_name=cocktail_names,
+            new_rating=stars  # nur ganze Sterne
+        )
+
+        self._database.refresh_cache()
+        self._drink_title.set_badge_value_text(f"{new_avg:.1f}")
+
+    def _sync_rating_badge_from_cache(self) -> None:
+        avg = self._database.cocktail_ratings[self.current_cocktail_index]
+
+        if avg is None:
+            self._drink_title.set_badge_value_text("—")  # oder "" oder "0.0"
+        else:
+            self._drink_title.set_badge_value_text(f"{float(avg):.1f}")
+
 
     def _clear_view(self) -> None:
         # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht

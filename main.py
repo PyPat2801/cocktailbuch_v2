@@ -6,7 +6,7 @@ import os
 from os.path import exists
 from PySide6.QtWidgets import QApplication
 from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
-    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle
+    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle, SideBarStyle
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -28,8 +28,9 @@ def main():
     else:
         database = get_database(db_filename)
 
-    main_window = MainWindow(app, config, paths, styling.main_window_style, database)
+    # database.reset_ratings()
 
+    main_window = MainWindow(app, config, paths, styling.main_window_style, database)
     main_window.initialize()
     main_window.show()
 
@@ -43,7 +44,6 @@ def set_app_resolution() -> tuple[int, int]:
     width = math.ceil(geometry.width() * 0.7)
     height = math.ceil(geometry.height() * 0.7)
 
-    print(width, height)
     return width, height
 
 
@@ -68,14 +68,16 @@ def create_config():
         ),
         all_drinks_page=AllDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
-            arrow_left=Rectangle(origin_x=0, origin_y=15, width=1, height=1),
-            arrow_right=Rectangle(origin_x=49, origin_y=15, width=1, height=1),
-            drink_title=Rectangle(origin_x=7, origin_y=1, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=7, origin_y=9, width=21, height=10),
+            arrow_left=Rectangle(origin_x=0, origin_y=31, width=1, height=1),
+            arrow_right=Rectangle(origin_x=49, origin_y=31, width=1, height=1),
+            drink_title=Rectangle(origin_x=7, origin_y=0, width=21, height=7),
+            drink_ingredients=Rectangle(origin_x=7, origin_y=8, width=21, height=11),
             drink_description=Rectangle(origin_x=7, origin_y=20, width=21, height=8),
             drink_type=Rectangle(origin_x=7, origin_y=29, width=21, height=3),
             drink_image=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
-            drink_delete=Rectangle(origin_x=1, origin_y=28, width=3, height=5),
+            drink_rating_stars=Rectangle(origin_x=35, origin_y=28, width=8, height=3),
+            drink_delete=Rectangle(origin_x=0, origin_y=25, width=5, height=6),
+            side_bar=Rectangle(origin_x=0, origin_y=0, width=5, height=32),
             global_params=GlobalParams(delete_password="1708")
         ),
         add_drinks_page=AddDrinksConfig(
@@ -97,7 +99,8 @@ def create_styling():
             all_drinks_style=AllDrinksStyle(
                 sheet_left_style=SheetLeftStyle(),
                 sheet_right_style=SheetRightStyle(),
-                arrow_style=ArrowBarStyle()
+                arrow_style=ArrowBarStyle(),
+                side_bar_style=SideBarStyle(),
             ),
             home_style=HomeStyle(
                 text_style=HomeTextStyle()
@@ -143,6 +146,9 @@ def create_default_database(db_name, path):
     for index, cocktail in enumerate(Utility.get_image_files_list(images_path)):
         database.add_image_to_db(file_name=cocktail, cocktail_name=sorted_standardized_cocktail_names[index],
                                  path=images_path)
+    database.add_column_if_not_exists(table_name="cocktails", column_name="rating", column_definition="REAL")
+    database.add_column_if_not_exists("cocktails", "rating_sum", "REAL")
+    database.add_column_if_not_exists("cocktails", "rating_count", "INTEGER")
     return database
 
 

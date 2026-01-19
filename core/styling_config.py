@@ -39,7 +39,7 @@ class SheetLeftStyle:
 
         QLabel {{
             color: white;
-            background-color: gray;
+            background-color: black;
             font-size: {font_size}px;
         }}
         QPlainTextEdit {{
@@ -101,6 +101,16 @@ class SheetRightStyle:
 
 
 @dataclass
+class SideBarStyle:
+    background = """
+            QLabel {
+                background-color: #1E1E1E;
+                border-right: 2px solid #FFFFFF;
+            }
+        """
+
+
+@dataclass
 class HomeTextStyle:
     text_style: str = """
             color: white;
@@ -115,6 +125,7 @@ class AllDrinksStyle:
     arrow_style: ArrowBarStyle
     sheet_left_style: SheetLeftStyle
     sheet_right_style: SheetRightStyle
+    side_bar_style: SideBarStyle
 
 
 @dataclass
@@ -133,7 +144,6 @@ class MainWindowStyle:
     all_drinks_style: AllDrinksStyle
     home_style: HomeStyle
     add_drinks_style: AddDrinksStyle
-
 
 
 @dataclass

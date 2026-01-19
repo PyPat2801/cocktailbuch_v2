@@ -6,5 +6,5 @@ class GoToFindDrinksButton(BaseButton):
         super().__init__(
             path,
             styling="background-color: transparent; border: none;",
-            display_image_filename="find_drinks.png"
+            display_image_filename="find_drink.svg"
         )

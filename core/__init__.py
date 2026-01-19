@@ -15,7 +15,8 @@ from .styling_config import (
     MainWindowStyle,
     SheetLeftStyle,
     StylingConfig,
-    SheetRightStyle
+    SheetRightStyle,
+    SideBarStyle
 )
 
 from .path_config import PathConfig

@@ -6,7 +6,7 @@ class GotoDrinksButton(BaseButton):
         super().__init__(
             path, 
             styling="background-color: transparent; border: none;", 
-            display_image_filename="go_to_drinks.png"
+            display_image_filename="go_to_drinks.svg"
         )
         self._callback = goto_all_drinks_callback
 

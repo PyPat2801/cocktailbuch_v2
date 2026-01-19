@@ -18,14 +18,14 @@ class DrinkDelete(QPushButton):
             self.clicked.connect(self._callback)
 
     def _set_style(self):
-        self.setStyleSheet("background-color: transparent; border: none;")
+        self.setStyleSheet("background-color: transparent; border: None; ")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def _initialize_image_label(self):
         self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("delete.png", self._path))
+        pixmap = QPixmap(Utility.get_image_path("delete_transparent.png", self._path))
         self._image_label.setPixmap(pixmap)
 
     def resizeEvent(self, event):

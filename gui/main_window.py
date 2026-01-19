@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
 
     def _show_home_page(self):
         self._all_drinks_page.reset_cocktail_index()
+        self._all_drinks_page.reset_rating_view()
         self._show_page(0)
 
     def _show_all_drinks_page(self, jump_to_last: bool = False):
