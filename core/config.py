@@ -61,6 +61,7 @@ class AllDrinksConfig:
     drink_image: Rectangle
     drink_rating_stars: Rectangle
     drink_delete: Rectangle
+    drink_edit: Rectangle
     side_bar: Rectangle
     global_params: GlobalParams
 

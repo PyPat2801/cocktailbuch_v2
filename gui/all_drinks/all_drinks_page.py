@@ -2,7 +2,8 @@ from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
 
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
 from gui.all_drinks.drinks_widgets import ArrowBar
-from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, DrinkDescription, DrinkType, DrinkDelete
+from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, \
+    DrinkDescription, DrinkType, DrinkDelete, DrinkEdit
 from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage, DrinkRatingStars
 from gui.all_drinks.drinks_widgets.side_bar import SideBar
 
@@ -33,6 +34,7 @@ class AllDrinksPage(BaseLayer):
 
         self._side_bar = SideBar(styling.side_bar_style)
         self._drink_delete = DrinkDelete(path, delete_callback=self._on_delete_clicked)
+        self._drink_edit = DrinkEdit(path, edit_callback=self._on_edit_clicked)
 
     def initialize(self, layout):
         super().initialize(layout)
@@ -58,6 +60,7 @@ class AllDrinksPage(BaseLayer):
 
         self._side_bar.initialize()
         self._drink_delete.initialize()
+        self._drink_edit.initialize()
 
     def _add_all_drinks_widgets(self, layout):
         self._add_arrow_left(layout)
@@ -73,6 +76,7 @@ class AllDrinksPage(BaseLayer):
 
         self._add_side_bar(layout)
         self._add_drink_delete(layout)
+        self._add_drink_edit(layout)
 
         self.setLayout(layout)
 
@@ -158,6 +162,15 @@ class AllDrinksPage(BaseLayer):
             self._config.drink_delete.origin_x,
             self._config.drink_delete.height,
             self._config.drink_delete.width,
+        )
+
+    def _add_drink_edit(self, layout):
+        layout.addWidget(
+            self._drink_edit,
+            self._config.drink_edit.origin_y,
+            self._config.drink_edit.origin_x,
+            self._config.drink_edit.height,
+            self._config.drink_edit.width,
         )
 
     def _add_side_bar(self, layout):
@@ -296,6 +309,8 @@ class AllDrinksPage(BaseLayer):
         else:
             self._drink_title.set_badge_value_text(f"{float(avg):.1f}")
 
+    def _on_edit_clicked(self):
+        pass
 
     def _clear_view(self) -> None:
         # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht

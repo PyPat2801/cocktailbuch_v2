@@ -3,12 +3,12 @@ from PySide6.QtWidgets import QPushButton, QLabel, QSizePolicy
 from core import Utility
 
 
-class DrinkDelete(QPushButton):
-    def __init__(self, path, delete_callback=None):
+class DrinkEdit(QPushButton):
+    def __init__(self, path, edit_callback=None):
         super().__init__()
         self._path = path
         self._image_label = QLabel(self)
-        self._callback = delete_callback
+        self._callback = edit_callback
 
     def initialize(self):
         self._set_style()
@@ -25,7 +25,7 @@ class DrinkDelete(QPushButton):
         self._image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._image_label.setScaledContents(True)
 
-        pixmap = QPixmap(Utility.get_image_path("delete.png", self._path))
+        pixmap = QPixmap(Utility.get_image_path("edit.png", self._path))
         self._image_label.setPixmap(pixmap)
 
     def resizeEvent(self, event):

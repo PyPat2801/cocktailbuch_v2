@@ -3,3 +3,4 @@ from .drink_type import DrinkType
 from .drink_ingredients import DrinkIngredients
 from .drink_description import DrinkDescription
 from .drink_delete import DrinkDelete
+from .drink_edit import DrinkEdit

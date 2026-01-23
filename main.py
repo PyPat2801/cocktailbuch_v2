@@ -77,13 +77,14 @@ def create_config():
             drink_image=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
             drink_rating_stars=Rectangle(origin_x=35, origin_y=28, width=8, height=3),
             drink_delete=Rectangle(origin_x=0, origin_y=25, width=5, height=6),
+            drink_edit=Rectangle(origin_x=0, origin_y=18, width=5, height=6),
             side_bar=Rectangle(origin_x=0, origin_y=0, width=5, height=32),
             global_params=GlobalParams(delete_password="1708")
         ),
         add_drinks_page=AddDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
-            title_template=Rectangle(origin_x=2, origin_y=1, width=21, height=7),
-            ingredients_template=Rectangle(origin_x=2, origin_y=9, width=21, height=10),
+            title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
+            ingredients_template=Rectangle(origin_x=2, origin_y=8, width=21, height=11),
             description_template=Rectangle(origin_x=2, origin_y=20, width=21, height=7),
             type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=3),
             image_template=Rectangle(origin_x=29, origin_y=2, width=17, height=25),
@@ -147,8 +148,8 @@ def create_default_database(db_name, path):
         database.add_image_to_db(file_name=cocktail, cocktail_name=sorted_standardized_cocktail_names[index],
                                  path=images_path)
     database.add_column_if_not_exists(table_name="cocktails", column_name="rating", column_definition="REAL")
-    database.add_column_if_not_exists("cocktails", "rating_sum", "REAL")
-    database.add_column_if_not_exists("cocktails", "rating_count", "INTEGER")
+    database.add_column_if_not_exists(table_name="cocktails", column_name="rating_sum", column_definition="REAL")
+    database.add_column_if_not_exists(table_name="cocktails", column_name="rating_count", column_definition="INTEGER")
     return database
 
 
