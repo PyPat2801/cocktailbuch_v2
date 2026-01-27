@@ -29,7 +29,6 @@ class SheetLeftStyle:
 
     drink_ingredients: str = """
         QScrollArea {{
-            border: 1px solid white;
             background-color: transparent;
         }}
 
@@ -50,17 +49,25 @@ class SheetLeftStyle:
         }}
     """
     drink_description: str = """
+        QScrollArea {{
+            background-color: transparent;
+            border-top: 2px solid #FFFFFF;
+        }}
+
+        QScrollArea > QWidget {{
+            background-color: transparent;
+        }}
+
         QLabel {{
             color: white;
-            background-color: transparent;
+            background-color: black;
             font-size: {font_size}px;
         }}
-        
         QPlainTextEdit {{
             color: white;
             background-color: transparent;
             font-size: {font_size}px;
-            border: 1px solid gray;
+            border: 1px solid white;
         }}
     """
     drink_type: str = drink_title

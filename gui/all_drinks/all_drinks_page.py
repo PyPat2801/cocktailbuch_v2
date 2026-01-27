@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
 from gui.all_drinks.drinks_widgets import ArrowBar
 from gui.all_drinks.drinks_widgets.sheet_left import DrinkTitle, DrinkIngredients, \
-    DrinkDescription, DrinkType, DrinkDelete, DrinkEdit
+    DrinkDescription, DrinkType, DrinkDelete, DrinkEdit, DrinkRandomise
 from gui.all_drinks.drinks_widgets.sheet_right import DrinkImage, DrinkRatingStars
 from gui.all_drinks.drinks_widgets.side_bar import SideBar
 
@@ -35,6 +35,7 @@ class AllDrinksPage(BaseLayer):
         self._side_bar = SideBar(styling.side_bar_style)
         self._drink_delete = DrinkDelete(path, delete_callback=self._on_delete_clicked)
         self._drink_edit = DrinkEdit(path, edit_callback=self._on_edit_clicked)
+        self._drink_randomise = DrinkRandomise(path, randomise_callback=self._on_randomise_clicked)
 
     def initialize(self, layout):
         super().initialize(layout)
@@ -61,6 +62,7 @@ class AllDrinksPage(BaseLayer):
         self._side_bar.initialize()
         self._drink_delete.initialize()
         self._drink_edit.initialize()
+        self._drink_randomise.initialize()
 
     def _add_all_drinks_widgets(self, layout):
         self._add_arrow_left(layout)
@@ -77,6 +79,7 @@ class AllDrinksPage(BaseLayer):
         self._add_side_bar(layout)
         self._add_drink_delete(layout)
         self._add_drink_edit(layout)
+        self._add_drink_randomise(layout)
 
         self.setLayout(layout)
 
@@ -173,6 +176,15 @@ class AllDrinksPage(BaseLayer):
             self._config.drink_edit.width,
         )
 
+    def _add_drink_randomise(self, layout):
+        layout.addWidget(
+            self._drink_randomise,
+            self._config.drink_randomise.origin_y,
+            self._config.drink_randomise.origin_x,
+            self._config.drink_randomise.height,
+            self._config.drink_randomise.width,
+        )
+
     def _add_side_bar(self, layout):
         layout.addWidget(
             self._side_bar,
@@ -203,7 +215,7 @@ class AllDrinksPage(BaseLayer):
 
         drink_description = self._drink_description
         cocktail_description_text = self._database.cocktail_descriptions[self.current_cocktail_index]
-        drink_description.setText(cocktail_description_text)
+        drink_description.set_text(cocktail_description_text)
 
         drink_type = self._drink_type
         cocktail_type_text = self._database.cocktail_types_unsorted[self.current_cocktail_index]
@@ -312,11 +324,14 @@ class AllDrinksPage(BaseLayer):
     def _on_edit_clicked(self):
         pass
 
+    def _on_randomise_clicked(self):
+        pass
+
     def _clear_view(self) -> None:
         # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht
         self._drink_title.set_text("")
         self._drink_ingredients.set_text("")
-        self._drink_description.setText("")
+        self._drink_description.set_text("")
         self._drink_type.setText("")
 
         try:

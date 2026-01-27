@@ -24,7 +24,7 @@ class DrinkIngredients(QScrollArea):
         self._content_layout.setContentsMargins(0, 0, 0, 0)
         self._content_layout.setSpacing(0)
         self._label.setTextFormat(Qt.RichText)  # wegen <br> und Bullet-HTML
-        self._label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self._label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter)
         self._configure_scroll_area()
         self._apply_style(font_size=24)
 
@@ -79,5 +79,6 @@ class DrinkIngredients(QScrollArea):
 
     @staticmethod
     def format_ingredients(ingredients_text: str):
-        formatted_recipe_text = "<br>".join([f"• {item.strip()}" for item in ingredients_text.split(",")])
+        formatted_recipe_text = "<br>".join([f"{item.strip()}" for item in ingredients_text.split(",")])
+        # formatted_recipe_text = "<br>".join([f"• {item.strip()}" for item in ingredients_text.split(",")])
         return formatted_recipe_text

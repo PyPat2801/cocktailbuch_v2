@@ -29,7 +29,6 @@ def main():
         database = get_database(db_filename)
 
     # database.reset_ratings()
-
     main_window = MainWindow(app, config, paths, styling.main_window_style, database)
     main_window.initialize()
     main_window.show()
@@ -71,13 +70,14 @@ def create_config():
             arrow_left=Rectangle(origin_x=0, origin_y=31, width=1, height=1),
             arrow_right=Rectangle(origin_x=49, origin_y=31, width=1, height=1),
             drink_title=Rectangle(origin_x=7, origin_y=0, width=21, height=7),
-            drink_ingredients=Rectangle(origin_x=7, origin_y=8, width=21, height=11),
+            drink_ingredients=Rectangle(origin_x=7, origin_y=7, width=21, height=12),
             drink_description=Rectangle(origin_x=7, origin_y=20, width=21, height=8),
             drink_type=Rectangle(origin_x=7, origin_y=29, width=21, height=3),
             drink_image=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
             drink_rating_stars=Rectangle(origin_x=35, origin_y=28, width=8, height=3),
             drink_delete=Rectangle(origin_x=0, origin_y=25, width=5, height=6),
             drink_edit=Rectangle(origin_x=0, origin_y=18, width=5, height=6),
+            drink_randomise=Rectangle(origin_x=0, origin_y=3, width=5, height=6),
             side_bar=Rectangle(origin_x=0, origin_y=0, width=5, height=32),
             global_params=GlobalParams(delete_password="1708")
         ),
