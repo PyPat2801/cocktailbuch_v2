@@ -33,10 +33,20 @@ class AddDrinksPage(BaseLayer):
         self._cancel_drink_button = CancelDrinkButton(configuration.cancel_drink_button, styling.sheet_right_style)
 
         self._edit_id: int | None = None
+        self._signals_connected = False
+        self._validation_connected = False
 
     def initialize(self, layout):
         super().initialize(layout)
+        self._initialize_widgets()
+        self._set_widgets(layout)
 
+        self._goto_home_button.raise_()  # overlaps the other widgets
+
+        self._connect_signals()
+        self._apply_initial_state()
+
+    def _initialize_widgets(self):
         self._drink_title.initialize()
         self._drink_ingredients.initialize()
         self._drink_description.initialize()
@@ -45,6 +55,7 @@ class AddDrinksPage(BaseLayer):
         self._confirm_drink_button.initialize()
         self._cancel_drink_button.initialize()
 
+    def _set_widgets(self, layout):
         self._add_title_template(layout)
         self._add_ingredients_template(layout)
         self._add_description_template(layout)
@@ -54,20 +65,22 @@ class AddDrinksPage(BaseLayer):
         self._add_cancel_drink_button(layout)
 
         self.setLayout(layout)
-        self._goto_home_button.raise_()  # overlaps the other widgets
 
-        self._set_confirm_button_status()
-        self._set_cancel_button_status()
+    def _connect_signals(self):
+        if self._signals_connected:
+            return
 
-    def _set_confirm_button_status(self):
         self._confirm_drink_button.clicked.connect(self._on_confirm_clicked)
-        self._confirm_drink_button.setEnabled(False)
-        self._wire_validation_signals()
-        self._update_confirm_button_state()
-
-    def _set_cancel_button_status(self):
         self._cancel_drink_button.clicked.connect(self._on_cancel_clicked)
+
+        self._wire_validation_signals()
+
+        self._signals_connected = True
+
+    def _apply_initial_state(self) -> None:
+        self._confirm_drink_button.setEnabled(False)
         self._cancel_drink_button.setEnabled(True)
+        self._update_confirm_button_state()
 
     def _add_title_template(self, layout):
         layout.addWidget(
@@ -276,11 +289,16 @@ class AddDrinksPage(BaseLayer):
         self._leave_page(self._goto_home_callback)
 
     def _wire_validation_signals(self) -> None:
+        if self._validation_connected:
+            return
+
         self._drink_title.textChanged.connect(self._update_confirm_button_state)
         self._drink_type.textChanged.connect(self._update_confirm_button_state)
         self._drink_ingredients.textChanged.connect(self._update_confirm_button_state)
         self._drink_description.textChanged.connect(self._update_confirm_button_state)
         self._drink_image.image_selected.connect(lambda _path: self._update_confirm_button_state())
+
+        self._validation_connected = True
 
     def _update_confirm_button_state(self) -> None:
         self._confirm_drink_button.setEnabled(self._all_inputs_valid())

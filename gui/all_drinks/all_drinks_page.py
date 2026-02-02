@@ -16,6 +16,8 @@ class AllDrinksPage(BaseLayer):
     def __init__(self, configuration: AllDrinksConfig, styling: AllDrinksStyle,  path: str, goto_home_callback, goto_add_drinks_callback, database: DataBase):
         super().__init__(configuration.goto_home_button, path, goto_home_callback)
 
+        self._signals_connected = False # damit wird mehrfaches Connecten unterbunden
+
         self._config = configuration
         self._styling = styling
         self._database = database
@@ -24,8 +26,8 @@ class AllDrinksPage(BaseLayer):
 
         self.current_cocktail_index = 0
 
-        self._arrow_left = ArrowBar("<=", self.scroll_left, styling.arrow_style)
-        self._arrow_right = ArrowBar("=>", self.scroll_right, styling.arrow_style)
+        self._arrow_left = ArrowBar("<=", styling.arrow_style)
+        self._arrow_right = ArrowBar("=>", styling.arrow_style)
 
         self._drink_title = DrinkTitle(styling.sheet_left_style)
         self._drink_ingredients = DrinkIngredients(styling.sheet_left_style)
@@ -36,17 +38,16 @@ class AllDrinksPage(BaseLayer):
         self._drink_rating_stars = DrinkRatingStars(self._path)
 
         self._side_bar = SideBar(styling.side_bar_style)
-        self._drink_delete = DrinkDelete(path, delete_callback=self._on_delete_clicked)
-        self._drink_edit = DrinkEdit(path, edit_callback=self._on_edit_clicked)
-        self._drink_randomise = DrinkRandomise(path, randomise_callback=self._on_randomise_clicked)
+        self._drink_delete = DrinkDelete(path)
+        self._drink_edit = DrinkEdit(path)
+        self._drink_randomise = DrinkRandomise(path)
 
     def initialize(self, layout):
         super().initialize(layout)
 
         self._initialize_all_drinks_widgets()
         self._add_all_drinks_widgets(layout)
-
-        self._drink_rating_stars.rating_committed.connect(self._on_rating_clicked)
+        self._connect_signals()
 
         self.swap_pages()
 
@@ -197,6 +198,20 @@ class AllDrinksPage(BaseLayer):
             self._config.side_bar.width,
         )
 
+    def _connect_signals(self) -> None:
+
+        if self._signals_connected:
+            return
+
+        self._arrow_left.clicked.connect(self.scroll_left)
+        self._arrow_right.clicked.connect(self.scroll_right)
+
+        self._drink_delete.clicked.connect(self._on_delete_clicked)
+        self._drink_edit.clicked.connect(self._on_edit_clicked)
+        self._drink_randomise.clicked.connect(self._on_randomise_clicked)
+
+        self._drink_rating_stars.rating_committed.connect(self._on_rating_clicked)
+
     def scroll_left(self):
         self.current_cocktail_index = max(0, self.current_cocktail_index - 1)
         self.swap_pages()
@@ -207,6 +222,10 @@ class AllDrinksPage(BaseLayer):
         self.swap_pages()
 
     def swap_pages(self):
+        if not self._database.cocktail_names:
+            self._clear_view()
+            return
+
         drink_title = self._drink_title
         cocktail_title_text = self._database.cocktail_names[self.current_cocktail_index]
         drink_title.set_text(cocktail_title_text)
@@ -309,10 +328,10 @@ class AllDrinksPage(BaseLayer):
             self.reset_cocktail_view()
 
     def _on_rating_clicked(self, stars: int) -> None:
-        cocktail_names = self._database.cocktail_names[self.current_cocktail_index]
+        cocktail_name = self._database.cocktail_names[self.current_cocktail_index]
 
         new_avg = self._database.add_rating_for_cocktail(
-            cocktail_name=cocktail_names,
+            cocktail_name=cocktail_name,
             new_rating=stars  # nur ganze Sterne
         )
 

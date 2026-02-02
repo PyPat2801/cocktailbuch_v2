@@ -4,18 +4,14 @@ from core import Utility
 
 
 class DrinkDelete(QPushButton):
-    def __init__(self, path, delete_callback=None):
+    def __init__(self, path):
         super().__init__()
         self._path = path
         self._image_label = QLabel(self)
-        self._callback = delete_callback
 
     def initialize(self):
         self._set_style()
         self._initialize_image_label()
-
-        if callable(self._callback):
-            self.clicked.connect(self._callback)
 
     def _set_style(self):
         self.setStyleSheet("background-color: transparent; border: None; ")
