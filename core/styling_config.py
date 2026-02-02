@@ -15,6 +15,8 @@ class SheetLeftStyle:
             font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
             font-weight: bold;
             font-size: {font_size}px;
+            border: none;
+            outline: none;
         }}
         
         QLineEdit {{
@@ -23,6 +25,8 @@ class SheetLeftStyle:
             font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
             font-weight: bold;
             font-size: {font_size}px;
+            border: none;
+            outline: none;
             border: 1px solid gray;
         }}
     """
@@ -67,7 +71,7 @@ class SheetLeftStyle:
             color: white;
             background-color: transparent;
             font-size: {font_size}px;
-            border: 1px solid white;
+            border: 1px solid gray;
         }}
     """
     drink_type: str = drink_title

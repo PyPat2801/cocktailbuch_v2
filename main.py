@@ -83,12 +83,13 @@ def create_config():
         ),
         add_drinks_page=AddDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
-            title_template=Rectangle(origin_x=2, origin_y=0, width=21, height=7),
-            ingredients_template=Rectangle(origin_x=2, origin_y=8, width=21, height=11),
-            description_template=Rectangle(origin_x=2, origin_y=20, width=21, height=7),
-            type_template=Rectangle(origin_x=2, origin_y=28, width=21, height=3),
-            image_template=Rectangle(origin_x=29, origin_y=2, width=17, height=25),
-            confirm_drink_button=Rectangle(origin_x=34, origin_y=28, width=7, height=3)
+            title_template=Rectangle(origin_x=7, origin_y=0, width=21, height=7),
+            ingredients_template=Rectangle(origin_x=7, origin_y=7, width=21, height=12),
+            description_template=Rectangle(origin_x=7, origin_y=20, width=21, height=8),
+            type_template=Rectangle(origin_x=7, origin_y=29, width=21, height=3),
+            image_template=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
+            confirm_drink_button=Rectangle(origin_x=40, origin_y=28, width=7, height=3),
+            cancel_drink_button=Rectangle(origin_x=32, origin_y=28, width=7, height=3)
         )
     )
     return config

@@ -1,5 +1,5 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLineEdit, QSizePolicy
-from PySide6.QtCore import Signal, Qt
 
 from core import Rectangle, SheetLeftStyle, FontDivisors
 
@@ -17,8 +17,10 @@ class TypeTemplate(QLineEdit):
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_title)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        # self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setPlaceholderText("Typ eingeben …")
+        self.setPlaceholderText("Typ...")
+
+    def set_alignment(self, alignment: Qt.AlignmentFlag) -> None:
+        self.setAlignment(alignment)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -35,3 +37,10 @@ class TypeTemplate(QLineEdit):
 
     def get_value(self) -> str:
         return self.text().strip()
+
+    def set_value(self, value: str) -> None:
+        if value is None:
+            value = ""
+        self.setText(value)
+
+

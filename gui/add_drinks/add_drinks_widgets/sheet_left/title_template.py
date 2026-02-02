@@ -19,10 +19,14 @@ class TitleTemplate(QLineEdit):
         self.textChanged.connect(self._update_font_size)
 
     def _set_style(self):
+
         self.setStyleSheet(self._styling.drink_title)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        # self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setPlaceholderText("Titel eingeben …")
+
+        self.setPlaceholderText("Titel...")
+
+    def set_alignment(self, alignment: Qt.AlignmentFlag) -> None:
+        self.setAlignment(alignment)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -54,6 +58,11 @@ class TitleTemplate(QLineEdit):
 
         style = self._styling.drink_title.format(font_size=font_size)
         self.setStyleSheet(style)
+
+    def set_value(self, value: str) -> None:
+        if value is None:
+            value = ""
+        self.setText(value)
 
     def get_value(self) -> str:
         return self.text().strip()

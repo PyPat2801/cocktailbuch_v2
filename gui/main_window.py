@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QGridLayout, QLabel, QSizePolicy
 from PySide6.QtCore import Qt
 from core import GuiConfig, DataBase, MainWindowStyle, PathConfig
@@ -14,9 +16,14 @@ class MainWindow(QMainWindow):
         self._styling = styling
         self._app = application
         self._pages = QStackedWidget()
-        self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path, self._show_all_drinks_page, self._show_add_drinks_page, database)
-        self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style, paths.image_all_drinks_path, self._show_home_page, database)
-        self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style, paths.image_add_drinks_path, self._show_home_page, self._show_all_drinks_page, database)
+        self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path,
+                                   self._show_all_drinks_page, self._show_add_drinks_page, database)
+        self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style,
+                                              paths.image_all_drinks_path, self._show_home_page,
+                                              self._show_add_drinks_page, database)
+        self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style,
+                                              paths.image_add_drinks_path, self._show_home_page,
+                                              self._show_all_drinks_page, database)
 
     def initialize(self):
         self._set_window_format()
@@ -47,11 +54,11 @@ class MainWindow(QMainWindow):
         layout.setSpacing(0)
         for y in range(self._config.grid.height):
             for x in range(self._config.grid.width):
-                cell_label = self.create_coordinate_label(x, y)
+                cell_label = self.create_coordinate_label()
                 layout.addWidget(cell_label, y, x)
         return layout
 
-    def create_coordinate_label(self, x: int, y: int):
+    def create_coordinate_label(self):
         cell = QLabel()
         cell.setAlignment(Qt.AlignmentFlag.AlignCenter)
         cell.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -73,11 +80,16 @@ class MainWindow(QMainWindow):
         self._all_drinks_page.reset_rating_view()
         self._show_page(0)
 
-    def _show_all_drinks_page(self, jump_to_last: bool = False):
-        self._all_drinks_page.on_show(jump_to_last=jump_to_last)
+    def _show_all_drinks_page(self, jump_to_last: bool = False, select_id: int | None = None):
+        self._all_drinks_page.on_show(jump_to_last=jump_to_last, select_id=select_id)
         self._show_page(1)
 
-    def _show_add_drinks_page(self):
+    def _show_add_drinks_page(self, edit_id: int | None = None):
+        if edit_id is None:
+            self._add_drinks_page.prepare_for_add()
+        else:
+            self._add_drinks_page.prepare_for_edit(edit_id)
+
         self._show_page(2)
 
     def _show_page(self, index):

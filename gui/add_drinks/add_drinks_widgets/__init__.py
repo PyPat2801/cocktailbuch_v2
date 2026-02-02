@@ -4,3 +4,4 @@ from gui.add_drinks.add_drinks_widgets.sheet_left.description_template import De
 from gui.add_drinks.add_drinks_widgets.sheet_left.type_template import TypeTemplate
 from gui.add_drinks.add_drinks_widgets.sheet_right.image_template import ImageTemplate
 from gui.add_drinks.add_drinks_widgets.sheet_right.confirm_drink_button import ConfirmDrinkButton
+from gui.add_drinks.add_drinks_widgets.sheet_right.cancel_drink_button import CancelDrinkButton

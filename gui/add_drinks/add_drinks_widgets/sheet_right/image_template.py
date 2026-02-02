@@ -28,8 +28,8 @@ class ImageTemplate(QLabel):
     def _initialize_image_widget_and_style(self):
         self._image.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self._layout)
-        self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().setSpacing(0)
+        # self.layout().setContentsMargins(0, 0, 0, 0)
+        # self.layout().setSpacing(0)
         self.layout().addWidget(self._image)
 
         self._image.setText("Klick: Bild auswählen")
@@ -44,6 +44,18 @@ class ImageTemplate(QLabel):
 
         self._image.clear()
         self._image.setText("Klick: Bild auswählen")
+
+    def set_image_from_bytes(self, image_bytes: bytes) -> None:
+        pixmap = QPixmap()
+        if not pixmap.loadFromData(image_bytes):
+            return
+
+        self._original_pixmap = pixmap
+        self._image_path = "__from_db__"  # Sentinel, damit image_ok in Validation True bleibt
+
+        self.adjust_image_size()
+        self._image.setText("")
+        self.image_selected.emit(self._image_path)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -109,3 +121,11 @@ class ImageTemplate(QLabel):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.adjust_image_size()
+
+    def get_value(self) -> str:
+        pass
+
+    def set_value(self, value: str) -> None:
+        pass
+
+

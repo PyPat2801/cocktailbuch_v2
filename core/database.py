@@ -11,6 +11,7 @@ class DataBase:
         self.refresh_cache()
 
     def refresh_cache(self):
+        self.cocktail_ids: List[int] = self.get_keys_from_db()
         self.cocktail_names: List[str] = self.get_cocktail_attributes("name")
         self.cocktail_types: List[str] = sorted(list(set(self.get_cocktail_attributes("type"))))
         self.cocktail_types_unsorted: List[str] = self.get_cocktail_attributes("type")
@@ -100,10 +101,10 @@ class DataBase:
         cocktail_attributes = []
         try:
             if is_image:
-                c.execute("SELECT image FROM cocktails")
+                c.execute("SELECT image FROM cocktails ORDER BY id")
                 cocktail_attributes = [row[0] for row in c.fetchall()]
             else:
-                c.execute(f"SELECT {attribute} FROM cocktails")
+                c.execute(f"SELECT {attribute} FROM cocktails ORDER BY id")
                 cocktail_attributes = [row[0] for row in c.fetchall()]
         except sqlite3.OperationalError as e:
             print(str(e))
@@ -117,6 +118,26 @@ class DataBase:
         self.conn.commit()
         self.refresh_cache()
 
+    def update_recipe(self, cocktail_id: int, recipe_data: dict) -> None:
+        c = self.conn.cursor()
+        c.execute(
+            """
+            UPDATE cocktails
+            SET name = ?, ingredients = ?, description = ?, type = ?, image = ?
+            WHERE id = ?
+            """,
+            (
+                recipe_data["name"],
+                recipe_data["ingredients"],
+                recipe_data["description"],
+                recipe_data["type"],
+                recipe_data["image"],
+                cocktail_id,
+            )
+        )
+        self.conn.commit()
+        self.refresh_cache()
+
     def delete_cocktail(self, cocktail_name: str) -> int:
         c = self.conn.cursor()
         c.execute("DELETE FROM cocktails WHERE name = ?", (cocktail_name,))
@@ -124,8 +145,7 @@ class DataBase:
         self.conn.commit()
         return deleted_rows
 
-    def add_column_if_not_exists(
-            self, table_name: str, column_name: str, column_definition: str) -> None:
+    def add_column_if_not_exists(self, table_name: str, column_name: str, column_definition: str) -> None:
         cursor = self.conn.cursor()
 
         # bestehende Spalten abfragen
@@ -186,6 +206,5 @@ class DataBase:
         """)
 
         self.conn.commit()
-
 
 

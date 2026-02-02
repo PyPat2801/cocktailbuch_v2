@@ -2,7 +2,7 @@ from typing import Optional
 
 from PySide6.QtWidgets import QPlainTextEdit, QSizePolicy
 
-from PySide6.QtGui import QTextOption, QShortcut, QKeySequence
+from PySide6.QtGui import QTextOption, QShortcut, QKeySequence, Qt, QTextCursor
 
 from core import Rectangle, SheetLeftStyle, FontDivisors
 
@@ -23,9 +23,16 @@ class DescriptionTemplate(QPlainTextEdit):
 
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_description)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setTabChangesFocus(True)
         self.setWordWrapMode(QTextOption.WrapMode.WordWrap)
-        self.setPlaceholderText("Beschreibung eingeben …")
+        self.setPlaceholderText("Beschreibung...")
+
+        # ✅ Default: horizontal zentrierte Textblöcke
+        opt = self.document().defaultTextOption()
+        opt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.document().setDefaultTextOption(opt)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -46,3 +53,21 @@ class DescriptionTemplate(QPlainTextEdit):
 
     def get_value(self) -> str:
         return self.toPlainText().strip()
+
+    def set_value(self, value: str) -> None:
+        if value is None:
+            value = ""
+        self.setPlainText(value)
+        self._apply_center_alignment_to_document()
+
+    def _apply_center_alignment_to_document(self) -> None:
+        cursor = self.textCursor()
+        cursor.select(QTextCursor.SelectionType.Document)
+
+        block_fmt = cursor.blockFormat()
+        block_fmt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        cursor.setBlockFormat(block_fmt)
+
+        cursor.clearSelection()
+        self.setTextCursor(cursor)
+

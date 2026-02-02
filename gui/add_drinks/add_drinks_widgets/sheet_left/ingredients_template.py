@@ -2,7 +2,7 @@ from typing import Optional
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QPlainTextEdit, QSizePolicy
-from PySide6.QtGui import QShortcut, QKeySequence, Qt
+from PySide6.QtGui import QShortcut, QKeySequence, Qt, QTextCursor
 
 from PySide6.QtGui import QTextOption
 
@@ -11,10 +11,9 @@ from core import Rectangle, SheetLeftStyle, FontDivisors
 
 class IngredientsTemplate(QPlainTextEdit):
     """Mehrzeiliges Eingabefeld für Zutaten (Bullet-Liste).
-    - Enter: neue Zeile + Bullet-Präfix
+    - Enter: neue Zeile
     - Ctrl+Enter: confirmed-Signal
     """
-    BULLET = "• "
 
     def __init__(self, config: Rectangle, styling: SheetLeftStyle):
         super().__init__()
@@ -32,10 +31,15 @@ class IngredientsTemplate(QPlainTextEdit):
     def _set_style(self):
         self.setStyleSheet(self._styling.drink_ingredients)
 
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setTabChangesFocus(True)
         self.setWordWrapMode(QTextOption.WrapMode.WordWrap)
-        self.setPlaceholderText("Zutaten eingeben …")
+        self.setPlaceholderText("Zutaten...")
+
+        # ✅ Default: alle Textblöcke horizontal zentriert
+        opt = self.document().defaultTextOption()
+        opt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.document().setDefaultTextOption(opt)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -43,27 +47,6 @@ class IngredientsTemplate(QPlainTextEdit):
 
     def focusInEvent(self, event):
         super().focusInEvent(event)
-        # Differenzierung ist hier nötig, da sonst jedes mal wenn man rein klickt ein bulletpoint kommt
-        if not self.toPlainText().strip():
-            self._insert_bullet_at_cursor()
-        else:
-            self._insert_bullet_if_current_line_empty()
-
-    def _insert_bullet_at_cursor(self):
-        cursor = self.textCursor()
-        cursor.insertText(self.BULLET)
-        self.setTextCursor(cursor)
-
-    def _insert_bullet_if_current_line_empty(self):
-        cursor = self.textCursor()
-        cursor.movePosition(cursor.MoveOperation.StartOfLine)
-
-        cursor.select(cursor.SelectionType.LineUnderCursor)
-        line_text = cursor.selectedText()
-        if line_text.strip() == "":
-            cursor.clearSelection()
-            cursor.insertText(self.BULLET)
-            self.setTextCursor(cursor)
 
     def _update_font_size(self):
         profile = FontDivisors.get_active_font_profile_for_widget(self)
@@ -81,12 +64,16 @@ class IngredientsTemplate(QPlainTextEdit):
         self.setStyleSheet(style)
 
     def keyPressEvent(self, event):
-        # Enter: neue Zeile + Bullet
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and not (
                 event.modifiers() & Qt.KeyboardModifier.ShiftModifier):
             cursor = self.textCursor()
             cursor.insertText("\n")
-            cursor.insertText(self.BULLET)
+
+            # ✅ Blockausrichtung für neue Zeile setzen
+            fmt = cursor.blockFormat()
+            fmt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            cursor.setBlockFormat(fmt)
+
             self.setTextCursor(cursor)
             return
 
@@ -94,4 +81,22 @@ class IngredientsTemplate(QPlainTextEdit):
 
     def get_value(self) -> str:
         return self.toPlainText().strip()
+
+    def set_value(self, value: str) -> None:
+        if value is None:
+            value = ""
+        self.setPlainText(value)
+        self._apply_center_alignment_to_document()
+
+    def _apply_center_alignment_to_document(self) -> None:
+        cursor = self.textCursor()
+        cursor.select(QTextCursor.SelectionType.Document)
+
+        block_fmt = cursor.blockFormat()
+        block_fmt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        cursor.setBlockFormat(block_fmt)
+
+        cursor.clearSelection()
+        self.setTextCursor(cursor)
+
 

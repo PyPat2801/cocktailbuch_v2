@@ -22,7 +22,7 @@ class DrinkIngredients(QScrollArea):
     def initialize(self):
         self._set_style()
         self._content_layout.setContentsMargins(0, 0, 0, 0)
-        self._content_layout.setSpacing(0)
+        # self._content_layout.setSpacing(0)
         self._label.setTextFormat(Qt.RichText)  # wegen <br> und Bullet-HTML
         self._label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter)
         self._configure_scroll_area()
@@ -40,7 +40,7 @@ class DrinkIngredients(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setMinimumHeight(0)
         self.setMinimumWidth(0)
 

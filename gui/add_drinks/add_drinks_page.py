@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 from pathlib import Path
 import re
 
-from gui.add_drinks.add_drinks_widgets import TitleTemplate, IngredientsTemplate, DescriptionTemplate, TypeTemplate, ImageTemplate, ConfirmDrinkButton
+from PySide6.QtCore import Qt
+
+from gui.add_drinks.add_drinks_widgets import TitleTemplate, IngredientsTemplate, DescriptionTemplate, \
+                TypeTemplate, ImageTemplate, ConfirmDrinkButton, CancelDrinkButton
 from gui.base_layer import BaseLayer
 from core import AddDrinksConfig, DataBase, AddDrinksStyle
 
@@ -25,6 +30,9 @@ class AddDrinksPage(BaseLayer):
         self._drink_type = TypeTemplate(configuration.type_template, styling.sheet_left_style)
         self._drink_image = ImageTemplate(configuration.image_template, styling.sheet_right_style)
         self._confirm_drink_button = ConfirmDrinkButton(configuration.confirm_drink_button, styling.sheet_right_style)
+        self._cancel_drink_button = CancelDrinkButton(configuration.cancel_drink_button, styling.sheet_right_style)
+
+        self._edit_id: int | None = None
 
     def initialize(self, layout):
         super().initialize(layout)
@@ -35,6 +43,7 @@ class AddDrinksPage(BaseLayer):
         self._drink_type.initialize()
         self._drink_image.initialize()
         self._confirm_drink_button.initialize()
+        self._cancel_drink_button.initialize()
 
         self._add_title_template(layout)
         self._add_ingredients_template(layout)
@@ -42,17 +51,23 @@ class AddDrinksPage(BaseLayer):
         self._add_type_template(layout)
         self._add_image_template(layout)
         self._add_confirm_drink_button(layout)
+        self._add_cancel_drink_button(layout)
 
         self.setLayout(layout)
         self._goto_home_button.raise_()  # overlaps the other widgets
 
         self._set_confirm_button_status()
+        self._set_cancel_button_status()
 
     def _set_confirm_button_status(self):
         self._confirm_drink_button.clicked.connect(self._on_confirm_clicked)
         self._confirm_drink_button.setEnabled(False)
         self._wire_validation_signals()
         self._update_confirm_button_state()
+
+    def _set_cancel_button_status(self):
+        self._cancel_drink_button.clicked.connect(self._on_cancel_clicked)
+        self._cancel_drink_button.setEnabled(True)
 
     def _add_title_template(self, layout):
         layout.addWidget(
@@ -108,6 +123,51 @@ class AddDrinksPage(BaseLayer):
             self._config.confirm_drink_button.width,
         )
 
+    def _add_cancel_drink_button(self, layout):
+        layout.addWidget(
+            self._cancel_drink_button,
+            self._config.cancel_drink_button.origin_y,
+            self._config.cancel_drink_button.origin_x,
+            self._config.cancel_drink_button.height,
+            self._config.cancel_drink_button.width,
+        )
+
+    def prepare_for_add(self) -> None:
+        self._edit_id = None
+        self.reset_inputs()
+        self._drink_title.set_alignment(Qt.AlignmentFlag.AlignLeft)
+        self._drink_type.set_alignment(Qt.AlignmentFlag.AlignLeft)
+
+    def prepare_for_edit(self, cocktail_id: int) -> None:
+        self._database.refresh_cache()
+        self._edit_id = cocktail_id
+
+        if not hasattr(self._database, "cocktail_ids") or cocktail_id not in self._database.cocktail_ids:
+            # Fallback: falls ID nicht gefunden wird
+            self.prepare_for_add()
+            return
+
+        idx = self._database.cocktail_ids.index(cocktail_id)
+
+        self._drink_title.set_alignment(Qt.AlignmentFlag.AlignCenter)
+        self._drink_type.set_alignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Prefill Textfelder
+        self._drink_title.set_value(self._database.cocktail_names[idx])
+        self._drink_description.set_value(self._database.cocktail_descriptions[idx])
+        self._drink_type.set_value(self._database.cocktail_types_unsorted[idx])
+
+        # Zutaten: DB-String -> Bullet-Lines
+        ingredients_db = self._database.cocktail_ingredients[idx] or ""
+        self._drink_ingredients.set_value(self._db_ingredients_to_multiline(ingredients_db))
+
+        # Bild aus DB-Bytes laden
+        image_bytes = self._database.cocktail_images[idx]
+        if image_bytes:
+            self._drink_image.set_image_from_bytes(image_bytes)
+
+        self._update_confirm_button_state()
+
     def _on_confirm_clicked(self):
         recipe_data = self._collect_recipe_data()
         if recipe_data is None:
@@ -115,11 +175,38 @@ class AddDrinksPage(BaseLayer):
 
         raw_ingredients = self._drink_ingredients.get_value()
         recipe_data["ingredients"] = self.ingredients_to_db_string(raw_ingredients)
-        self._database.add_recipe(recipe_data)
+
+        if self._edit_id is None:
+            # Add
+            self._database.add_recipe(recipe_data)
+            self._leave_page(self._goto_all_drinks_callback, jump_to_last=True)
+            return
+
+        # Edit / Update
+        self._database.update_recipe(self._edit_id, recipe_data)
+        edited_id = self._edit_id
         self._leave_page(
             self._goto_all_drinks_callback,
-            jump_to_last=True
+            select_id=edited_id
         )
+
+    def _on_cancel_clicked(self):
+        # Edit-Modus
+        if self._edit_id is not None:
+            edited_id = self._edit_id
+            self._leave_page(
+                self._goto_all_drinks_callback,
+                select_id=edited_id
+            )
+            return
+
+        # Add-Modus
+        self._leave_page(self._goto_home_callback)
+
+    @staticmethod
+    def _db_ingredients_to_multiline(db_string: str) -> str:
+        parts = [p.strip() for p in (db_string or "").split(",") if p.strip()]
+        return "\n".join(parts)
 
     @staticmethod
     def ingredients_to_db_string(raw: str) -> str:
@@ -156,6 +243,16 @@ class AddDrinksPage(BaseLayer):
         path = self._drink_image.get_image_path()
         if not path:
             return None
+
+        # Bild wurde aus DB geladen (kein Dateipfad)
+        if path == "__from_db__":
+            if self._edit_id is None:
+                return None
+            self._database.refresh_cache()
+            if not hasattr(self._database, "cocktail_ids") or self._edit_id not in self._database.cocktail_ids:
+                return None
+            idx = self._database.cocktail_ids.index(self._edit_id)
+            return self._database.cocktail_images[idx]
 
         try:
             return Path(path).read_bytes()

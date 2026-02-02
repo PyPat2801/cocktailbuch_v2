@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
 
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
@@ -11,13 +13,14 @@ from gui.base_layer import BaseLayer
 
 
 class AllDrinksPage(BaseLayer):
-    def __init__(self, configuration: AllDrinksConfig, styling: AllDrinksStyle,  path: str, goto_home_callback, database: DataBase):
+    def __init__(self, configuration: AllDrinksConfig, styling: AllDrinksStyle,  path: str, goto_home_callback, goto_add_drinks_callback, database: DataBase):
         super().__init__(configuration.goto_home_button, path, goto_home_callback)
 
         self._config = configuration
         self._styling = styling
         self._database = database
         self._path = path
+        self._goto_add_drinks_callback = goto_add_drinks_callback
 
         self.current_cocktail_index = 0
 
@@ -229,14 +232,17 @@ class AllDrinksPage(BaseLayer):
         self._drink_rating_stars.reset_rating()
         self._sync_rating_badge_from_cache()
 
-    def on_show(self, jump_to_last: bool = False) -> None:
+    def on_show(self, jump_to_last: bool = False, select_id: int | None = None) -> None:
         self._database.refresh_cache()
 
         if len(self._database.cocktail_names) == 0:
             self.current_cocktail_index = 0
             return
 
-        if jump_to_last:
+        if select_id is not None and hasattr(self._database,
+                                             "cocktail_ids") and select_id in self._database.cocktail_ids:
+            self.current_cocktail_index = self._database.cocktail_ids.index(select_id)
+        elif jump_to_last:
             self.current_cocktail_index = len(self._database.cocktail_names) - 1
         else:
             self.current_cocktail_index = min(
@@ -322,7 +328,19 @@ class AllDrinksPage(BaseLayer):
             self._drink_title.set_badge_value_text(f"{float(avg):.1f}")
 
     def _on_edit_clicked(self):
-        pass
+        self._database.refresh_cache()
+
+        if len(self._database.cocktail_names) == 0:
+            return
+
+        if not hasattr(self._database, "cocktail_ids"):
+            return
+
+        if self.current_cocktail_index < 0 or self.current_cocktail_index >= len(self._database.cocktail_ids):
+            return
+
+        cocktail_id = self._database.cocktail_ids[self.current_cocktail_index]
+        self._goto_add_drinks_callback(edit_id=cocktail_id)
 
     def _on_randomise_clicked(self):
         pass
