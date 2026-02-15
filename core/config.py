@@ -29,7 +29,7 @@ class HomePageConfig:
     goto_gallery_button: Rectangle
     goto_inventory_button: Rectangle
     goto_add_drinks_button: Rectangle
-    goto_find_drinks_button: Rectangle
+    goto_search_drinks_button: Rectangle
 
     label_drinks_text: Rectangle
     label_add_text: Rectangle
@@ -69,9 +69,21 @@ class AllDrinksConfig:
 
 
 @dataclass
+class SearchDrinksConfig:
+    goto_home_button: Rectangle
+    search_by_drinks: Rectangle
+    search_by_ingredients: Rectangle
+    search_by_categories: Rectangle
+    search_by_favorites: Rectangle
+
+    search_input: Rectangle
+
+
+@dataclass
 class GuiConfig:
     window: Rectangle
     grid: GridSpan
     home_page: HomePageConfig
     all_drinks_page: AllDrinksConfig
     add_drinks_page: AddDrinksConfig
+    search_drinks_page: SearchDrinksConfig

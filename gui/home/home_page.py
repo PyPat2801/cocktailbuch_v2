@@ -1,13 +1,14 @@
 from PySide6.QtWidgets import QWidget
 
-from core import DataBase, HomePageConfig, HomeStyle
+from core import DataBase, HomePageConfig, HomeStyle, ImagesHome
 from gui.home.home_widgets import GotoDrinksButton, HomeIcon, GoToAddDrinksButton, \
-    GoToFindDrinksButton, HomeText, GoToGalleryButton, GoToInventoryButton, \
+    GoToSearchDrinksButton, HomeText, GoToGalleryButton, GoToInventoryButton, \
     BaseTextLabel
 
 
 class HomePage(QWidget):
-    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, goto_all_drinks_callback, goto_add_drinks_callback, database: DataBase):
+    def __init__(self, configuration: HomePageConfig, styling: HomeStyle, path: str, image_names: ImagesHome,
+                 goto_all_drinks_callback, goto_add_drinks_callback, goto_search_drinks_callback, database: DataBase):
         super().__init__()
         self._config = configuration
         self._database = database
@@ -16,11 +17,11 @@ class HomePage(QWidget):
         self.home_icon = HomeIcon(path)
         self.home_text = HomeText(styling.text_style)
 
-        self.goto_all_drinks_button = GotoDrinksButton(path, goto_all_drinks_callback)
-        self.goto_add_drinks_button = GoToAddDrinksButton(path, goto_add_drinks_callback)
-        self.goto_find_drinks_button = GoToFindDrinksButton(path)
-        self.goto_gallery_button = GoToGalleryButton(path)
-        self.goto_inventory_button = GoToInventoryButton(path)
+        self.goto_all_drinks_button = GotoDrinksButton(path, image_names.go_to_all_drinks, goto_all_drinks_callback)
+        self.goto_add_drinks_button = GoToAddDrinksButton(path, image_names.go_to_add_drinks, goto_add_drinks_callback)
+        self.goto_search_drinks_button = GoToSearchDrinksButton(path, image_names.go_to_search_drinks, goto_search_drinks_callback)
+        self.goto_gallery_button = GoToGalleryButton(path, image_names.go_to_gallery)
+        self.goto_inventory_button = GoToInventoryButton(path, image_names.go_to_inventory)
 
         self.label_drinks = BaseTextLabel(text="Drinks")
         self.label_add = BaseTextLabel(text="Hinzufügen")
@@ -33,7 +34,7 @@ class HomePage(QWidget):
         self.home_text.initialize()
         self.goto_all_drinks_button.initialize()
         self.goto_add_drinks_button.initialize()
-        self.goto_find_drinks_button.initialize()
+        self.goto_search_drinks_button.initialize()
         self.goto_gallery_button.initialize()
         self.goto_inventory_button.initialize()
 
@@ -49,7 +50,7 @@ class HomePage(QWidget):
         self._add_goto_gallery_button(layout)
         self._add_goto_inventory_button(layout)
         self._add_goto_add_drinks_button(layout)
-        self._add_goto_find_drinks_button(layout)
+        self._add_goto_search_drinks_button(layout)
 
         self._add_label_drinks_text(layout)
         self._add_label_add_text(layout)
@@ -106,13 +107,13 @@ class HomePage(QWidget):
             self._config.goto_add_drinks_button.width,
         )
 
-    def _add_goto_find_drinks_button(self, layout):
+    def _add_goto_search_drinks_button(self, layout):
         layout.addWidget(
-            self.goto_find_drinks_button,
-            self._config.goto_find_drinks_button.origin_y,
-            self._config.goto_find_drinks_button.origin_x,
-            self._config.goto_find_drinks_button.height,
-            self._config.goto_find_drinks_button.width,
+            self.goto_search_drinks_button,
+            self._config.goto_search_drinks_button.origin_y,
+            self._config.goto_search_drinks_button.origin_x,
+            self._config.goto_search_drinks_button.height,
+            self._config.goto_search_drinks_button.width,
         )
 
     def _add_home_text(self, layout):

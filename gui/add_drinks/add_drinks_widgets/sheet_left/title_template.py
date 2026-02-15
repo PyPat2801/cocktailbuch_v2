@@ -19,7 +19,6 @@ class TitleTemplate(QLineEdit):
         self.textChanged.connect(self._update_font_size)
 
     def _set_style(self):
-
         self.setStyleSheet(self._styling.drink_title)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 

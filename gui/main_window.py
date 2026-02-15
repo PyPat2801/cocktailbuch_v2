@@ -2,42 +2,52 @@ from __future__ import annotations
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QGridLayout, QLabel, QSizePolicy
 from PySide6.QtCore import Qt
-from core import GuiConfig, DataBase, MainWindowStyle, PathConfig
+from core import GuiConfig, DataBase, MainWindowStyle, PathConfig, ImageNames, ImagesHome
 from gui.all_drinks import AllDrinksPage
 from gui.home import HomePage
 from gui.add_drinks import AddDrinksPage
+from gui.search_drinks import SearchDrinksPage
 
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, application: QApplication, configuration: GuiConfig, paths: PathConfig, styling: MainWindowStyle, database: DataBase):
+    def __init__(self, application: QApplication, configuration: GuiConfig, paths: PathConfig,
+                 image_names: ImageNames, styling: MainWindowStyle, database: DataBase):
         super().__init__()
         self._config = configuration
         self._styling = styling
+        self.image_names = image_names
         self._app = application
         self._pages = QStackedWidget()
         self._home_page = HomePage(configuration.home_page,  styling.home_style, paths.image_home_path,
-                                   self._show_all_drinks_page, self._show_add_drinks_page, database)
+                                   image_names.images_home, self._show_all_drinks_page, self._show_add_drinks_page,
+                                   self._show_search_drinks_page, database)
         self._all_drinks_page = AllDrinksPage(configuration.all_drinks_page, styling.all_drinks_style,
                                               paths.image_all_drinks_path, self._show_home_page,
                                               self._show_add_drinks_page, database)
         self._add_drinks_page = AddDrinksPage(configuration.add_drinks_page, styling.add_drinks_style,
                                               paths.image_add_drinks_path, self._show_home_page,
                                               self._show_all_drinks_page, database)
+        self._search_drinks_page = SearchDrinksPage(configuration.search_drinks_page, styling.search_drinks_style,
+                                                    paths.image_search_drinks_path, image_names.images_search_by,
+                                                    self._show_home_page, database)
 
     def initialize(self):
         self._set_window_format()
         home_layout = self._create_grid_layout()
         all_drinks_layout = self._create_grid_layout()
         add_drinks_layout = self._create_grid_layout()
+        search_drinks_layout = self._create_grid_layout()
 
         self._home_page.initialize(home_layout)
         self._all_drinks_page.initialize(all_drinks_layout)
         self._add_drinks_page.initialize(add_drinks_layout)
+        self._search_drinks_page.initialize(search_drinks_layout)
 
         self._pages.addWidget(self._home_page)
         self._pages.addWidget(self._all_drinks_page)
         self._pages.addWidget(self._add_drinks_page)
+        self._pages.addWidget(self._search_drinks_page)
         self.setCentralWidget(self._pages)
 
     def _set_window_format(self):
@@ -91,6 +101,9 @@ class MainWindow(QMainWindow):
             self._add_drinks_page.prepare_for_edit(edit_id)
 
         self._show_page(2)
+
+    def _show_search_drinks_page(self):
+        self._show_page(3)
 
     def _show_page(self, index):
         self._pages.setCurrentIndex(index)

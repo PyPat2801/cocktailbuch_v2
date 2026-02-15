@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import random
+
 from PySide6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
 
 from core import DataBase, AllDrinksConfig, AllDrinksStyle
@@ -286,8 +288,29 @@ class AllDrinksPage(BaseLayer):
         )
         self.swap_pages()
 
+    def _sync_rating_badge_from_cache(self) -> None:
+        avg = self._database.cocktail_ratings[self.current_cocktail_index]
+
+        if avg is None:
+            self._drink_title.set_badge_value_text("—")  # oder "" oder "0.0"
+        else:
+            self._drink_title.set_badge_value_text(f"{float(avg):.1f}")
+
     def reset_rating_view(self):
         self._drink_rating_stars.reset_rating()
+
+    def _clear_view(self) -> None:
+        # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht
+        self._drink_title.set_text("")
+        self._drink_ingredients.set_text("")
+        self._drink_description.set_text("")
+        self._drink_type.setText("")
+
+        try:
+            self._drink_image.clear_image()
+        except AttributeError:
+            self._drink_image._original_pixmap = None
+            self._drink_image.drink_image.clear()
 
     def _on_delete_clicked(self) -> None:
 
@@ -338,14 +361,6 @@ class AllDrinksPage(BaseLayer):
         self._database.refresh_cache()
         self._drink_title.set_badge_value_text(f"{new_avg:.1f}")
 
-    def _sync_rating_badge_from_cache(self) -> None:
-        avg = self._database.cocktail_ratings[self.current_cocktail_index]
-
-        if avg is None:
-            self._drink_title.set_badge_value_text("—")  # oder "" oder "0.0"
-        else:
-            self._drink_title.set_badge_value_text(f"{float(avg):.1f}")
-
     def _on_edit_clicked(self):
         self._database.refresh_cache()
 
@@ -361,21 +376,25 @@ class AllDrinksPage(BaseLayer):
         cocktail_id = self._database.cocktail_ids[self.current_cocktail_index]
         self._goto_add_drinks_callback(edit_id=cocktail_id)
 
-    def _on_randomise_clicked(self):
-        pass
+    def _on_randomise_clicked(self) -> None:
+        self._database.refresh_cache()
+        if not self._database.cocktail_names:
+            return
 
-    def _clear_view(self) -> None:
-        # Absicherung falls der letzte Cocktail gelöscht werden sollte. Damit beim Löschen der Code nicht crasht
-        self._drink_title.set_text("")
-        self._drink_ingredients.set_text("")
-        self._drink_description.set_text("")
-        self._drink_type.setText("")
+        number_cocktails = len(self._database.cocktail_names)
 
-        try:
-            self._drink_image.clear_image()
-        except AttributeError:
-            self._drink_image._original_pixmap = None
-            self._drink_image.drink_image.clear()
+        if number_cocktails == 1:
+            self.current_cocktail_index = 0
+            self.swap_pages()
+            return
+
+        new_index = self.current_cocktail_index
+        while new_index == self.current_cocktail_index:
+            new_index = random.randrange(number_cocktails)
+
+        self.current_cocktail_index = new_index
+        self.swap_pages()
+
 
 
 

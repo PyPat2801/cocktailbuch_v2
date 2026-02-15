@@ -2,11 +2,11 @@ from .base_button import BaseButton
 
 
 class GoToAddDrinksButton(BaseButton):
-    def __init__(self, path, goto_add_drinks_callback):
+    def __init__(self, path, image_go_add_to_drinks, goto_add_drinks_callback):
         super().__init__(
             path,
             styling="background-color: transparent; border: none;",
-            display_image_filename="add_drink.svg"
+            display_image_filename=image_go_add_to_drinks
         )
         self._callback = goto_add_drinks_callback
 

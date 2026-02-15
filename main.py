@@ -6,7 +6,8 @@ import os
 from os.path import exists
 from PySide6.QtWidgets import QApplication
 from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
-    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle, SideBarStyle
+    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle, SideBarStyle, \
+    SearchDrinksStyle, SearchDrinksButtonStyle, SearchInputStyle,  ImageNames, ImagesHome, ImagesSearchBy
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -20,6 +21,7 @@ def main():
     config = create_config()
     styling = create_styling()
     paths = create_path_config()
+    image_names = create_image_config()
 
     if any(arg.startswith("--new-db") for arg in sys.argv):
         if exists(db_filename):
@@ -29,7 +31,7 @@ def main():
         database = get_database(db_filename)
 
     # database.reset_ratings()
-    main_window = MainWindow(app, config, paths, styling.main_window_style, database)
+    main_window = MainWindow(app, config, paths, image_names, styling.main_window_style, database)
     main_window.initialize()
     main_window.show()
 
@@ -56,7 +58,7 @@ def create_config():
             home_text=Rectangle(origin_x=10, origin_y=1, width=30, height=14),
             goto_drinks_button=Rectangle(origin_x=1, origin_y=18, width=7, height=9),
             goto_add_drinks_button=Rectangle(origin_x=11, origin_y=18, width=7, height=9),
-            goto_find_drinks_button=Rectangle(origin_x=21, origin_y=18, width=7, height=9),
+            goto_search_drinks_button=Rectangle(origin_x=21, origin_y=18, width=7, height=9),
             goto_gallery_button=Rectangle(origin_x=31, origin_y=18, width=7, height=9),
             goto_inventory_button=Rectangle(origin_x=41, origin_y=18, width=7, height=9),
             label_drinks_text=Rectangle(origin_x=1, origin_y=28, width=7, height=3),
@@ -90,6 +92,14 @@ def create_config():
             image_template=Rectangle(origin_x=31, origin_y=2, width=17, height=25),
             confirm_drink_button=Rectangle(origin_x=40, origin_y=28, width=7, height=3),
             cancel_drink_button=Rectangle(origin_x=32, origin_y=28, width=7, height=3)
+        ),
+        search_drinks_page=SearchDrinksConfig(
+            goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
+            search_by_drinks=Rectangle(origin_x=5, origin_y=18, width=8, height=10),
+            search_by_ingredients=Rectangle(origin_x=16, origin_y=18, width=8, height=10),
+            search_by_categories=Rectangle(origin_x=27, origin_y=18, width=8, height=10),
+            search_by_favorites=Rectangle(origin_x=38, origin_y=18, width=8, height=10),
+            search_input=Rectangle(origin_x=10, origin_y=12, width=30, height=4)
         )
     )
     return config
@@ -110,6 +120,13 @@ def create_styling():
             add_drinks_style=AddDrinksStyle(
                 sheet_left_style=SheetLeftStyle(),
                 sheet_right_style=SheetRightStyle()
+            ),
+            search_drinks_style=SearchDrinksStyle(
+                search_drinks_button_style=SearchDrinksButtonStyle(),
+                search_favorites_button_style=SearchDrinksButtonStyle(),
+                search_ingredients_button_style=SearchDrinksButtonStyle(),
+                search_categories_button_style=SearchDrinksButtonStyle(),
+                search_input_style=SearchInputStyle()
             )
         )
     )
@@ -120,8 +137,28 @@ def create_path_config():
     paths_config = PathConfig(image_home_path='images/home',
                               image_all_drinks_path='images/all_drinks',
                               image_default_cocktails='images/default_cocktails',
-                              image_add_drinks_path='images/add_drinks')
+                              image_add_drinks_path='images/add_drinks',
+                              image_search_drinks_path='images/search_drinks')
     return paths_config
+
+
+def create_image_config():
+    images_config = ImageNames(
+        images_home=ImagesHome(
+            go_to_all_drinks='go_to_all_drinks.svg',
+            go_to_add_drinks='go_to_add_drinks.svg',
+            go_to_search_drinks='go_to_search_drinks.svg',
+            go_to_gallery='go_to_gallery.svg',
+            go_to_inventory='go_to_inventory.svg'
+        ),
+        images_search_by=ImagesSearchBy(
+            search_by_drinks='search_by_drinks.svg',
+            search_by_categories='search_by_categories.svg',
+            search_by_ingredients='search_by_ingredients.svg',
+            search_by_favorites='search_by_favorites.svg'
+        )
+    )
+    return images_config
 
 
 def get_database(db_filename):

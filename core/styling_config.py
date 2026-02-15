@@ -30,7 +30,6 @@ class SheetLeftStyle:
             border: 1px solid gray;
         }}
     """
-
     drink_ingredients: str = """
         QScrollArea {{
             background-color: transparent;
@@ -122,16 +121,6 @@ class SideBarStyle:
 
 
 @dataclass
-class HomeTextStyle:
-    text_style: str = """
-            color: white;
-            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
-            font-weight: bold;
-            font-size: {font_size}px;
-        """
-
-
-@dataclass
 class AllDrinksStyle:
     arrow_style: ArrowBarStyle
     sheet_left_style: SheetLeftStyle
@@ -146,15 +135,56 @@ class AddDrinksStyle:
 
 
 @dataclass
+class SearchDrinksButtonStyle:
+    buttons_style: str = "background-color: transparent; border: none;"
+
+
+@dataclass
+class SearchInputStyle:
+    input_style: str = """
+            QLineEdit {{
+                color: white;
+                background-color: transparent;
+                font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+                font-weight: bold;
+                font-size: {font_size}px;
+                border: none;
+                outline: none;
+                border: 1px solid gray;
+        }}
+        """
+
+
+@dataclass
+class SearchDrinksStyle:
+    search_drinks_button_style: SearchDrinksButtonStyle
+    search_favorites_button_style: SearchDrinksButtonStyle
+    search_ingredients_button_style: SearchDrinksButtonStyle
+    search_categories_button_style: SearchDrinksButtonStyle
+    search_input_style: SearchInputStyle
+
+
+@dataclass
+class HomeTextStyle:
+    text_style: str = """
+            color: white;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+        """
+
+
+@dataclass
 class HomeStyle:
     text_style: HomeTextStyle
 
 
 @dataclass
 class MainWindowStyle:
-    all_drinks_style: AllDrinksStyle
     home_style: HomeStyle
+    all_drinks_style: AllDrinksStyle
     add_drinks_style: AddDrinksStyle
+    search_drinks_style: SearchDrinksStyle
 
 
 @dataclass

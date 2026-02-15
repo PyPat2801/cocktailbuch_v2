@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt, QPixmap
 from PySide6.QtWidgets import QPushButton, QSizePolicy, QLabel
 
-from core.utility import Utility
+from core import Utility
 
 
 class BaseButton(QPushButton):
