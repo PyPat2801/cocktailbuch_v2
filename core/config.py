@@ -77,6 +77,7 @@ class SearchDrinksConfig:
     search_by_favorites: Rectangle
 
     search_input: Rectangle
+    drink_thumbnails: Rectangle
 
 
 @dataclass

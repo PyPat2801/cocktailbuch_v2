@@ -4,6 +4,8 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QLabel, QVBoxLayout
 from PySide6.QtCore import Qt, QSize
 
+from core import Utility
+
 
 class DrinkImage(QLabel):
     def __init__(self, database):
@@ -28,13 +30,13 @@ class DrinkImage(QLabel):
             return
 
         self._original_pixmap = pixmap
-        self.adjust_image_size()
+        self._adjust_image_size()
 
     def update_image(self, image_data):
         self._set_image(image_data)
 
-    def adjust_image_size(self, width: Optional[int] = None, height: Optional[int] = None):
-        if self._original_pixmap is None:
+    def _adjust_image_size(self, width: Optional[int] = None, height: Optional[int] = None) -> None:
+        if self._original_pixmap is None or self._original_pixmap.isNull():
             return
 
         if width is None or height is None:
@@ -44,28 +46,14 @@ class DrinkImage(QLabel):
             return
 
         target_size = QSize(width, height)
-        original_size = self._original_pixmap.size()
-        if original_size.width() <= 0 or original_size.height() <= 0:
-            return
 
-        original_aspect_ratio = original_size.width() / original_size.height()
-        target_aspect_ratio = target_size.width() / target_size.height()
+        cropped = Utility.scale_and_crop_center(
+            self._original_pixmap,
+            target_size
+        )
 
-        if original_aspect_ratio > target_aspect_ratio:
-            scaled_size = QSize(int(target_size.height() * original_aspect_ratio), target_size.height())
-        else:
-            scaled_size = QSize(target_size.width(), int(target_size.width() / original_aspect_ratio))
-
-        scaled_pixmap = self._original_pixmap.scaled(scaled_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        size_diff = scaled_pixmap.size() - target_size
-
-        x = int(0.5 * size_diff.width())
-        y = int(0.5 * size_diff.height())
-
-        image_cropped = scaled_pixmap.copy(x, y, target_size.width(), target_size.height())
-
-        self.drink_image.setPixmap(image_cropped)
-        self.drink_image.setScaledContents(False)
+        self.setPixmap(cropped)
+        self.setScaledContents(False)
 
     def clear_image(self) -> None:
         self._original_pixmap = None
@@ -73,5 +61,5 @@ class DrinkImage(QLabel):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.adjust_image_size()
+        self._adjust_image_size()
 

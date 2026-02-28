@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QFileDialog
 
-from core import Rectangle, SheetRightStyle
+from core import Rectangle, SheetRightStyle, Utility
 
 
 class ImageTemplate(QLabel):
@@ -28,8 +28,6 @@ class ImageTemplate(QLabel):
     def _initialize_image_widget_and_style(self):
         self._image.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self._layout)
-        # self.layout().setContentsMargins(0, 0, 0, 0)
-        # self.layout().setSpacing(0)
         self.layout().addWidget(self._image)
 
         self._image.setText("Klick: Bild auswählen")
@@ -95,27 +93,11 @@ class ImageTemplate(QLabel):
             return
 
         target_size = QSize(width, height)
-        original_size = self._original_pixmap.size()
-        if original_size.width() <= 0 or original_size.height() <= 0:
-            return
-
-        original_aspect_ratio = original_size.width() / original_size.height()
-        target_aspect_ratio = target_size.width() / target_size.height()
-
-        if original_aspect_ratio > target_aspect_ratio:
-            scaled_size = QSize(int(target_size.height() * original_aspect_ratio), target_size.height())
-        else:
-            scaled_size = QSize(target_size.width(), int(target_size.width() / original_aspect_ratio))
-
-        scaled_pixmap = self._original_pixmap.scaled(scaled_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        size_diff = scaled_pixmap.size() - target_size
-
-        x = int(0.5 * size_diff.width())
-        y = int(0.5 * size_diff.height())
-
-        image_cropped = scaled_pixmap.copy(x, y, target_size.width(), target_size.height())
-
-        self._image.setPixmap(image_cropped)
+        cropped = Utility.scale_and_crop_center(
+            self._original_pixmap,
+            target_size
+        )
+        self._image.setPixmap(cropped)
         self._image.setScaledContents(False)
 
     def resizeEvent(self, event):

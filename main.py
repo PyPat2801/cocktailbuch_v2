@@ -6,8 +6,8 @@ import os
 from os.path import exists
 from PySide6.QtWidgets import QApplication
 from core import AllDrinksStyle, HomeStyle, HomeTextStyle, ArrowBarStyle, MainWindowStyle, SheetLeftStyle,\
-    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle, SideBarStyle, \
-    SearchDrinksStyle, SearchDrinksButtonStyle, SearchInputStyle,  ImageNames, ImagesHome, ImagesSearchBy
+    StylingConfig, DataBase, Utility, PathConfig, AddDrinksStyle, SheetRightStyle, SideBarStyle, label_style, \
+    SearchDrinksStyle, SearchDrinksButtonStyle, SearchInputStyle, ThumbnailsStyle,  ImageNames, ImagesHome, ImagesSearchBy
 from gui.main_window import MainWindow
 
 from core.config import *
@@ -95,11 +95,12 @@ def create_config():
         ),
         search_drinks_page=SearchDrinksConfig(
             goto_home_button=Rectangle(origin_x=43, origin_y=0, width=7, height=6),
-            search_by_drinks=Rectangle(origin_x=5, origin_y=18, width=8, height=10),
-            search_by_ingredients=Rectangle(origin_x=16, origin_y=18, width=8, height=10),
-            search_by_categories=Rectangle(origin_x=27, origin_y=18, width=8, height=10),
-            search_by_favorites=Rectangle(origin_x=38, origin_y=18, width=8, height=10),
-            search_input=Rectangle(origin_x=10, origin_y=12, width=30, height=4)
+            search_by_drinks=Rectangle(origin_x=5, origin_y=7, width=8, height=10),
+            search_by_ingredients=Rectangle(origin_x=16, origin_y=7, width=8, height=10),
+            search_by_categories=Rectangle(origin_x=27, origin_y=7, width=8, height=10),
+            search_by_favorites=Rectangle(origin_x=38, origin_y=7, width=8, height=10),
+            search_input=Rectangle(origin_x=10, origin_y=1, width=30, height=4),
+            drink_thumbnails=Rectangle(origin_x=10, origin_y=21, width=30, height=10),
         )
     )
     return config
@@ -126,7 +127,9 @@ def create_styling():
                 search_favorites_button_style=SearchDrinksButtonStyle(),
                 search_ingredients_button_style=SearchDrinksButtonStyle(),
                 search_categories_button_style=SearchDrinksButtonStyle(),
-                search_input_style=SearchInputStyle()
+                search_input_style=SearchInputStyle(),
+                thumbnails_style=ThumbnailsStyle(),
+                label_style=label_style
             )
         )
     )

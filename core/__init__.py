@@ -20,7 +20,9 @@ from .styling_config import (
     SideBarStyle,
     SearchDrinksStyle,
     SearchDrinksButtonStyle,
-    SearchInputStyle
+    SearchInputStyle,
+    ThumbnailsStyle,
+    label_style
 )
 
 from .path_config import PathConfig, ImageNames, ImagesHome, ImagesSearchBy

@@ -1,6 +1,13 @@
 from dataclasses import dataclass
 
 
+label_style: str = """
+            color: white;
+            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+            font-weight: bold;
+            font-size: {font_size}px;
+        """
+
 @dataclass
 class ArrowBarStyle:
     background: str = "background-color: white; border: 1px solid white"
@@ -156,22 +163,58 @@ class SearchInputStyle:
 
 
 @dataclass
+class ThumbnailsStyle:
+    background: str = "background-color: black;"
+    thumbnail_item: str = """
+            QLabel {
+                border: 2px solid white;
+                background-color: black;
+            }
+        """
+    scrollbar: str = """
+            QScrollBar:horizontal {
+                background: black;      /* gesamte Scrollbar */
+                height: 14px;
+                border: 1px solid white;
+            }
+        
+            QScrollBar::groove:horizontal {
+                background: white;      /* Bereich hinter dem Handle */
+            }
+        
+            QScrollBar::handle:horizontal {
+                background: gray;       /* Handle bleibt sichtbar */
+                border-radius: 4px;
+                min-width: 20px;
+            }
+        
+            QScrollBar::add-line:horizontal,
+            QScrollBar::sub-line:horizontal {
+                background: none;
+                border: none;
+            }
+        
+            QScrollBar::add-page:horizontal,
+            QScrollBar::sub-page:horizontal {
+                background: none;
+            }
+        """
+
+
+@dataclass
 class SearchDrinksStyle:
     search_drinks_button_style: SearchDrinksButtonStyle
     search_favorites_button_style: SearchDrinksButtonStyle
     search_ingredients_button_style: SearchDrinksButtonStyle
     search_categories_button_style: SearchDrinksButtonStyle
     search_input_style: SearchInputStyle
+    thumbnails_style: ThumbnailsStyle
+    label_style: str
 
 
 @dataclass
 class HomeTextStyle:
-    text_style: str = """
-            color: white;
-            font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
-            font-weight: bold;
-            font-size: {font_size}px;
-        """
+    text_style: str = label_style
 
 
 @dataclass
