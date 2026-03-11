@@ -1,9 +1,13 @@
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QLineEdit, QSizePolicy
 from core import SearchInputStyle, FontDivisors
 from PySide6.QtGui import QFontMetrics, QFont
+from PySide6.QtCore import Qt
 
 
 class SearchInput(QLineEdit):
+    font_updated = Signal()
+
     def __init__(self, styling: SearchInputStyle):
         super().__init__()
 
@@ -18,6 +22,8 @@ class SearchInput(QLineEdit):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self.setPlaceholderText("Hier was auch immer eingeben...")
+        # self.setAlignment(Qt.AlignmentFlag.AlignCenter) das sorgt für visuelle Fehler bei den anderen Placeholdern.
+                                                        # Keine Ahnung warum -> überprüfen
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -49,3 +55,4 @@ class SearchInput(QLineEdit):
 
         style = self._styling.input_style.format(font_size=font_size)
         self.setStyleSheet(style)
+        self.font_updated.emit()

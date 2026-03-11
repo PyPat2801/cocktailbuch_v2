@@ -1,10 +1,23 @@
-from PySide6.QtCore import Qt, QSize, QEvent
+from PySide6.QtCore import Qt, QSize, QEvent, Signal
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget, QScrollArea, QHBoxLayout, QLabel, QSizePolicy
 from core import Utility, ThumbnailsStyle
 
+from functools import partial
+
+
+class ClickableThumbnailLabel(QLabel):
+    clicked = Signal()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.clicked.emit()
+        super().mousePressEvent(event)
+
 
 class DrinkThumbnails(QWidget):
+    thumbnail_clicked = Signal(int)
+
     def __init__(self, styling: ThumbnailsStyle):
         super().__init__()
 
@@ -14,11 +27,14 @@ class DrinkThumbnails(QWidget):
         self._content = None
         self._content_layout = None
 
-        self._thumbnail_labels: list[QLabel] = []
+        # Cache: einmal erzeugen, dann nur noch visible toggeln
+        self._thumbnail_labels: list[ClickableThumbnailLabel] = []
         self._original_pixmaps: list[QPixmap] = []
 
         self._spacing = 10
         self._margins = 0
+
+        self._stretch_added = False
 
     def initialize(self) -> None:
         if self._initialized:
@@ -55,9 +71,48 @@ class DrinkThumbnails(QWidget):
 
         self._scroll.horizontalScrollBar().rangeChanged.connect(lambda *_: self._update_thumbnail_sizes())
 
-    def clear(self) -> None:
+    # ---------------------------
+    # Aufbau (einmalig)
+    # ---------------------------
+    def set_all_images_from_bytes(self, images: list[bytes]) -> None:
+        """
+        Builds and caches all thumbnail widgets once.
+        Subsequent filtering must use show_only_indices / reset_filter.
+        """
+        if not self._initialized:
+            self.initialize()
+
         if self._content_layout is None:
             return
+
+        # Falls bereits aufgebaut: nicht erneut dekodieren
+        if self._thumbnail_labels and len(self._thumbnail_labels) == len(images):
+            self.reset_filter()
+            self._update_thumbnail_sizes()
+            return
+
+        # Einmaliger Aufbau (hier ist clear() weiterhin sinnvoll)
+        self._hard_clear_widgets()
+
+        for i, data in enumerate(images):
+            lbl, pm = self._create_thumbnail_label_from_bytes(data)
+            lbl.clicked.connect(partial(self.thumbnail_clicked.emit, i))
+            self._thumbnail_labels.append(lbl)
+            self._original_pixmaps.append(pm)
+            self._content_layout.addWidget(lbl)
+
+        # Stretch nur einmal hinzufügen
+        if not self._stretch_added:
+            self._content_layout.addStretch(1)
+            self._stretch_added = True
+
+        self._update_thumbnail_sizes()
+
+    def _hard_clear_widgets(self) -> None:
+        """Clears layout widgets and cache completely (expensive path; avoid calling repeatedly)."""
+        if self._content_layout is None:
+            return
+
         while self._content_layout.count():
             item = self._content_layout.takeAt(0)
             w = item.widget()
@@ -67,29 +122,47 @@ class DrinkThumbnails(QWidget):
 
         self._thumbnail_labels.clear()
         self._original_pixmaps.clear()
+        self._stretch_added = False
 
-    def set_images_from_bytes(self, images: list[bytes]) -> None:
-        if not self._initialized:
-            self.initialize()
+    # ---------------------------
+    # Filter (schnell)
+    # ---------------------------
+    def show_only_indices(self, indices: set[int]) -> None:
+        """
+        Shows only thumbnails whose position index is in 'indices'.
+        Does not rebuild widgets or reload images.
+        """
+        if not self._thumbnail_labels:
+            return
+        for i, lbl in enumerate(self._thumbnail_labels):
+            lbl.setVisible(i in indices)
 
-        self.clear()
-        if self._content_layout is None:
+        # Layout/scrollbar aktualisieren
+        if self._content is not None:
+            self._content.update()
+        if self._scroll is not None:
+            self._scroll.viewport().update()
+
+    def reset_filter(self) -> None:
+        """Shows all cached thumbnails."""
+        if not self._thumbnail_labels:
             return
 
-        for data in images:
-            lbl, pm = self._create_thumbnail_label_from_bytes(data)
-            self._thumbnail_labels.append(lbl)
-            self._original_pixmaps.append(pm)
-            self._content_layout.addWidget(lbl)
+        for lbl in self._thumbnail_labels:
+            lbl.setVisible(True)
 
-        self._content_layout.addStretch(1)
-        self._update_thumbnail_sizes()
+        if self._content is not None:
+            self._content.update()
+        if self._scroll is not None:
+            self._scroll.viewport().update()
 
-    def _create_thumbnail_label_from_bytes(self, data: bytes) -> tuple[QLabel, QPixmap]:
-        lbl = QLabel()
+    # ---------------------------
+    # Intern
+    # ---------------------------
+    def _create_thumbnail_label_from_bytes(self, data: bytes) -> tuple[ClickableThumbnailLabel, QPixmap]:
+        lbl = ClickableThumbnailLabel()
         lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lbl.setScaledContents(False)
-
         lbl.setStyleSheet(self._styling.thumbnail_item)
 
         pm = QPixmap()
@@ -128,6 +201,7 @@ class DrinkThumbnails(QWidget):
 
         target = QSize(thumb_w, thumb_h)
 
+        # Wichtig: Pixmap scaling nur bei Resize, nicht bei Filter
         for lbl, pm in zip(self._thumbnail_labels, self._original_pixmaps):
             lbl.setFixedSize(target)
             if not pm.isNull():

@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
                                               self._show_all_drinks_page, database)
         self._search_drinks_page = SearchDrinksPage(configuration.search_drinks_page, styling.search_drinks_style,
                                                     paths.image_search_drinks_path, image_names.images_search_by,
-                                                    self._show_home_page, database)
+                                                    self._show_home_page, self._show_all_drinks_page, database)
 
     def initialize(self):
         self._set_window_format()

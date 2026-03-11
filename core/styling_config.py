@@ -159,7 +159,26 @@ class SearchInputStyle:
                 outline: none;
                 border: 1px solid gray;
         }}
+            QLineEdit::placeholder {{
+                color: rgba(255, 255, 255, 140);
+        }}
         """
+    autocompleter_style: str = """
+            QListView {
+                    background-color: #111111;
+                    color: white;
+                    border: 1px solid rgba(255,255,255,0.35);
+                    font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+                }
+
+                QListView::item {
+                    padding: 2px 2px;
+                }
+
+                QListView::item:selected {
+                    background-color: #2a2a2a;
+                }
+    """
 
 
 @dataclass
