@@ -150,18 +150,37 @@ class SearchDrinksButtonStyle:
 class SearchInputStyle:
     input_style: str = """
             QLineEdit {{
-                color: white;
-                background-color: transparent;
-                font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
-                font-weight: bold;
-                font-size: {font_size}px;
-                border: none;
-                outline: none;
-                border: 1px solid gray;
-        }}
-            QLineEdit::placeholder {{
-                color: rgba(255, 255, 255, 140);
-        }}
+                    font-family: "Brush Script MT", "Segoe Script", "Cursive", "sans-serif";
+                    font-weight: bold;
+                    font-size: {font_size}px;
+                    border-radius: 40px;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    qproperty-alignment: AlignCenter;
+            }}
+    
+            QLineEdit:enabled {{
+                    color: black;
+                    background-color: white;
+            }}
+    
+            QLineEdit:focus:enabled {{
+                    background-color: white;
+                    
+            }}
+    
+            QLineEdit:disabled {{
+                    color: #555555;
+                    background-color: #333333;
+            }}
+    
+            QLineEdit:enabled::placeholder {{
+                    color: #888888;
+            }}
+    
+            QLineEdit:disabled::placeholder {{
+                    color: #666666;
+            }}
         """
     autocompleter_style: str = """
             QListView {

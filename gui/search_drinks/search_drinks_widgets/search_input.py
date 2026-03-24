@@ -21,9 +21,7 @@ class SearchInput(QLineEdit):
         self.setStyleSheet(self._styling.input_style)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        self.setPlaceholderText("Hier was auch immer eingeben...")
-        # self.setAlignment(Qt.AlignmentFlag.AlignCenter) das sorgt für visuelle Fehler bei den anderen Placeholdern.
-                                                        # Keine Ahnung warum -> überprüfen
+        self.setPlaceholderText("Suchbegriff eingeben...")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -41,7 +39,7 @@ class SearchInput(QLineEdit):
 
         # Falls Text nicht in widget_width passt, dann reduziere ihn
         if text:
-            reserve = 5
+            reserve = 40 # Reserve wegen Padding (20px links, 20px rechts)
             target_width = max(1, widget_width - reserve)
 
             f = QFont(self.font())

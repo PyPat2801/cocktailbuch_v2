@@ -217,7 +217,7 @@ class SearchDrinksPage(BaseLayer):
     def _reset_search_state(self):
         self.search_input.clear()
         self.search_input.setEnabled(False)
-        self.search_input.setPlaceholderText("Hier was auch immer eingeben...")
+        self.search_input.setPlaceholderText("Suchbegriff eingeben...")
 
         self._drink_completer_model.setStringList([])  # Modell leeren. Completer bleibt bestehen
         self._highlight_delegate.set_query("")
@@ -244,7 +244,6 @@ class SearchDrinksPage(BaseLayer):
         self.search_input.clear()
         self.search_input.setEnabled(True)
         self.search_input.setPlaceholderText(placeholder)
-        self.search_input.setFocus()
 
         cleaned = [s.strip() for s in items if isinstance(s, str) and s.strip()]
         self._drink_completer_model.setStringList(cleaned)
@@ -260,7 +259,7 @@ class SearchDrinksPage(BaseLayer):
     def _on_search_by_ingredients_clicked(self):
         self._search_mode = "ingredients"
         self.drink_thumbnails.reset_filter()
-        self._activate_search_mode("Ingredients", self._ingredient_tokens_sorted)
+        self._activate_search_mode("Zutaten", self._ingredient_tokens_sorted)
 
     def _on_thumbnail_clicked(self, index: int) -> None:
         if index < 0 or index >= len(self._all_ids):
