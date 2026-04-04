@@ -4,11 +4,11 @@ from core import FontDivisors, HomeTextStyle
 
 
 class BaseTextLabel(QLabel):
-
-    def __init__(self, text: str, styling: str = HomeTextStyle.text_style):
+    def __init__(self, text: str, font_size_type: str, styling: str = HomeTextStyle.text_style):
         super().__init__()
         self._text = text
         self._styling = styling
+        self._font_size_type = font_size_type
 
     def initialize(self):
         self._set_style()
@@ -25,7 +25,7 @@ class BaseTextLabel(QLabel):
 
     def _update_font_size(self):
         profile = FontDivisors.get_active_font_profile_for_widget(self)
-        divisor = profile["font_home_label"]
+        divisor = profile[self._font_size_type]
         font_size = int(self.width() / divisor)
         font_size = max(12, min(120, font_size))
         style = self._styling.format(font_size=font_size)

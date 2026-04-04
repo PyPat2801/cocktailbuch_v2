@@ -79,6 +79,11 @@ class SearchDrinksConfig:
     search_input: Rectangle
     drink_thumbnails: Rectangle
 
+    label_search_by_name_text: Rectangle
+    label_search_by_ingredient_text: Rectangle
+    label_search_by_type_text: Rectangle
+    label_search_by_rating_text: Rectangle
+
 
 @dataclass
 class GuiConfig:

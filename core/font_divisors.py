@@ -16,7 +16,8 @@ class FontDivisors:
         "font_description": 20,
         "font_home_text": 7,
         "font_home_label": 4,
-        "font_search_by_input": 12
+        "font_search_by_input": 12,
+        "font_search_by_labels": 6
     }
 
     @classmethod
