@@ -2,8 +2,9 @@ from PySide6.QtWidgets import QWidget
 
 from core import DataBase, HomePageConfig, HomeStyle, ImagesHome
 from gui.home.home_widgets import GotoDrinksButton, HomeIcon, GoToAddDrinksButton, \
-    GoToSearchDrinksButton, HomeText, GoToGalleryButton, GoToInventoryButton, \
-    BaseTextLabel
+    GoToSearchDrinksButton, HomeText, GoToGalleryButton, GoToInventoryButton
+
+from gui.base_text_label import BaseTextLabel
 
 
 class HomePage(QWidget):
@@ -23,11 +24,11 @@ class HomePage(QWidget):
         self.goto_gallery_button = GoToGalleryButton(path, image_names.go_to_gallery)
         self.goto_inventory_button = GoToInventoryButton(path, image_names.go_to_inventory)
 
-        self.label_drinks = BaseTextLabel(text="Drinks")
-        self.label_add = BaseTextLabel(text="Hinzufügen")
-        self.label_search = BaseTextLabel(text="Suche")
-        self.label_gallery = BaseTextLabel(text="Galerie")
-        self.label_inventory = BaseTextLabel(text="Inventur")
+        self.label_drinks = BaseTextLabel(text="Drinks", font_size_type="font_home_label")
+        self.label_add = BaseTextLabel(text="Hinzufügen", font_size_type="font_home_label")
+        self.label_search = BaseTextLabel(text="Suche", font_size_type="font_home_label")
+        self.label_gallery = BaseTextLabel(text="Galerie", font_size_type="font_home_label")
+        self.label_inventory = BaseTextLabel(text="Inventur", font_size_type="font_home_label")
 
     def initialize(self, layout):
         self.home_icon.initialize()

@@ -101,6 +101,10 @@ def create_config():
             search_by_favorites=Rectangle(origin_x=38, origin_y=7, width=8, height=10),
             search_input=Rectangle(origin_x=10, origin_y=1, width=30, height=4),
             drink_thumbnails=Rectangle(origin_x=10, origin_y=21, width=30, height=10),
+            label_search_by_name_text=Rectangle(origin_x=4, origin_y=17, width=10, height=3),
+            label_search_by_ingredient_text = Rectangle(origin_x=15, origin_y=17, width=10, height=3),
+            label_search_by_type_text = Rectangle(origin_x=26, origin_y=17, width=10, height=3),
+            label_search_by_rating_text = Rectangle(origin_x=37, origin_y=17, width=10, height=3)
         )
     )
     return config
@@ -176,7 +180,7 @@ def create_default_database(db_name, path):
 
     # This is required to group image filenames with their respective cocktailnames to simplify
     # the image addition to the database
-    # Alternatively one could add the file_name to the .json and skip the file_name entry
+    # Alternatively, one could add the file_name to the .json and skip the file_name entry
     # when displaying the QLabel for the left page
     standardized_cocktail_names = [cocktail_name.lower().replace(' ', '_') + '.jpg' for cocktail_name in
                                    database.cocktail_names]

@@ -13,11 +13,26 @@ from gui.search_drinks.search_drinks_widgets import SearchByDrinks, SearchByFavo
 
 from .highlighter import Highlighter
 
+from gui.base_text_label import BaseTextLabel
+
 
 class SearchDrinksPage(BaseLayer):
     def __init__(self, configuration: SearchDrinksConfig, styling: SearchDrinksStyle, path: str,
                  image_names: ImagesSearchBy, goto_home_callback, goto_all_drinks_callback, database: DataBase):
         super().__init__(configuration.goto_home_button, path, goto_home_callback)
+
+        self._search_mode = "drinks"
+
+        # Caches / Index
+        self._all_images: list = []
+        self._all_ingredients: list[str] = []
+        self._all_names: list[str] = []
+        self._all_ids: list[int] = []
+
+        self._drink_name_to_index: dict[str, int] = {}
+        self._ingredient_token_to_indices: dict[str, set[int]] = {}
+        self._ingredient_display: dict[str, str] = {}
+        self._ingredient_tokens_sorted: list[str] = []
 
         self._signals_connected = False
         self._thumbnails_loaded = False
@@ -39,19 +54,10 @@ class SearchDrinksPage(BaseLayer):
         self.search_input = SearchInput(styling.search_input_style)
         self.drink_thumbnails = DrinkThumbnails(styling.thumbnails_style)
 
-        self._search_mode = "drinks"
-
-        # Caches / Index
-        self._all_images: list = []
-        self._all_ingredients: list[str] = []
-        self._all_names: list[str] = []
-        self._all_ids: list[int] = []
-
-        # self._drink_name_to_index: dict[str, set[int]] = {}
-        self._drink_name_to_index: dict[str, int] = {}
-        self._ingredient_token_to_indices: dict[str, set[int]] = {}
-        self._ingredient_display: dict[str, str] = {}
-        self._ingredient_tokens_sorted: list[str] = []
+        self.label_search_by_name = BaseTextLabel(text="Drink Name", font_size_type="font_search_by_labels")
+        self.label_search_by_ingredient = BaseTextLabel(text="Drink Zutat", font_size_type="font_search_by_labels")
+        self.label_search_by_type = BaseTextLabel(text="Drink Typ", font_size_type="font_search_by_labels")
+        self.label_search_by_rating = BaseTextLabel(text="Bewertung", font_size_type="font_search_by_labels")
 
     def initialize(self, layout):
         super().initialize(layout)
@@ -81,9 +87,13 @@ class SearchDrinksPage(BaseLayer):
         self.search_input.setEnabled(False)
 
         self.drink_thumbnails.initialize()
+        self.label_search_by_name.initialize()
+        self.label_search_by_ingredient.initialize()
+        self.label_search_by_type.initialize()
+        self.label_search_by_rating.initialize()
 
     def _initialize_completer(self):
-        self._drink_completer_model = QStringListModel(self)  # Modell kapselt Liste aus strings.
+        self._drink_completer_model = QStringListModel(self)  # Modell kapselt Liste aus Strings.
         self._drink_completer = QCompleter(self._drink_completer_model, self)  # Verbinde Model mit Completer
         self._drink_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)  # Groß/Kleinschreibung irrelevant
         self._drink_completer.setFilterMode(Qt.MatchFlag.MatchContains)  # suche nach input string "irgendwo", nicht nur am Anfang
@@ -114,6 +124,10 @@ class SearchDrinksPage(BaseLayer):
 
         self._add_search_input(layout)
         self._add_drink_thumbnails(layout)
+        self._add_label_search_by_name_text(layout)
+        self._add_label_search_by_ingredient_text(layout)
+        self._add_label_search_by_type_text(layout)
+        self._add_label_search_by_rating_text(layout)
         self.setLayout(layout)
 
     def _add_search_by_drinks(self, layout):
@@ -168,6 +182,38 @@ class SearchDrinksPage(BaseLayer):
             self._config.drink_thumbnails.origin_x,
             self._config.drink_thumbnails.height,
             self._config.drink_thumbnails.width
+        )
+
+    def _add_label_search_by_name_text(self, layout):
+        layout.addWidget(self.label_search_by_name,
+             self._config.label_search_by_name_text.origin_y,
+             self._config.label_search_by_name_text.origin_x,
+             self._config.label_search_by_name_text.height,
+             self._config.label_search_by_name_text.width,
+        )
+
+    def _add_label_search_by_ingredient_text(self, layout):
+        layout.addWidget(self.label_search_by_ingredient,
+             self._config.label_search_by_ingredient_text.origin_y,
+             self._config.label_search_by_ingredient_text.origin_x,
+             self._config.label_search_by_ingredient_text.height,
+             self._config.label_search_by_ingredient_text.width,
+        )
+
+    def _add_label_search_by_type_text(self, layout):
+        layout.addWidget(self.label_search_by_type,
+             self._config.label_search_by_type_text.origin_y,
+             self._config.label_search_by_type_text.origin_x,
+             self._config.label_search_by_type_text.height,
+             self._config.label_search_by_type_text.width,
+        )
+
+    def _add_label_search_by_rating_text(self, layout):
+        layout.addWidget(self.label_search_by_rating,
+             self._config.label_search_by_rating_text.origin_y,
+             self._config.label_search_by_rating_text.origin_x,
+             self._config.label_search_by_rating_text.height,
+             self._config.label_search_by_rating_text.width,
         )
 
     # -------------------------
